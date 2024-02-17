@@ -1,5 +1,6 @@
 package com.example.lolify_android
 
+import android.os.Build
 import android.os.Build.VERSION.SDK_INT
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -28,7 +29,6 @@ import androidx.compose.material3.darkColorScheme
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
-import androidx.navigation.compose.rememberNavController
 import coil.ImageLoader
 import coil.compose.rememberAsyncImagePainter
 import coil.decode.GifDecoder
@@ -37,20 +37,27 @@ import coil.request.ImageRequest
 import coil.size.Size
 import com.example.lolify_android.ui.theme.LolifyandroidTheme
 
-class MainActivity : ComponentActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContent {
-            LolifyandroidTheme {
-                // A surface container using the 'background' color from the theme
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background
-                ) {
-                    Navigation()
-                }
-            }
-        }
+@Composable
+fun ChampionList(modifier: Modifier = Modifier) {
+    Column (
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = modifier.padding(8.dp)
+    ){
+        Text(
+            text = "Champions",
+            fontSize = 30.sp,
+            lineHeight = 40.sp,
+            textAlign = TextAlign.Center,
+            modifier = modifier.padding(12.dp)
+        )
     }
 }
 
+@Preview(showBackground = true)
+@Composable
+fun ChampionListPreview() {
+    LolifyandroidTheme {
+        ChampionList()
+    }
+}
