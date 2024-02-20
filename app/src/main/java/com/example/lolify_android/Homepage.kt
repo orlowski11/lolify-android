@@ -1,5 +1,6 @@
 package com.example.lolify_android
 
+import android.content.Intent
 import android.os.Build
 import android.os.Build.VERSION.SDK_INT
 import android.os.Bundle
@@ -32,8 +33,6 @@ import androidx.compose.material3.lightColorScheme
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
-import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
 import coil.ImageLoader
 import coil.compose.rememberAsyncImagePainter
 import coil.decode.GifDecoder
@@ -44,7 +43,7 @@ import com.example.lolify_android.ui.theme.AppFont
 import com.example.lolify_android.ui.theme.LolifyandroidTheme
 
 @Composable
-fun Homepage(NavController: NavController, modifier: Modifier = Modifier) {
+fun Homepage(modifier: Modifier = Modifier) {
     Column (
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -93,19 +92,11 @@ fun Homepage(NavController: NavController, modifier: Modifier = Modifier) {
 
         Button(
             onClick = {
-                NavController.navigate(Screen.ChampionList.route)
+                context.startActivity(Intent(context, ChampionListActivity::class.java))
             },
             colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.tertiary)
         ){
             Text("Go to champions", fontFamily = AppFont.Montserrat)
         }
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun HomepagePreview() {
-    LolifyandroidTheme {
-        Homepage(rememberNavController())
     }
 }
