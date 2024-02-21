@@ -1,8 +1,9 @@
 package com.example.lolify_android
 
+import android.content.Intent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -17,25 +18,44 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImagePainter
 import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
 import coil.size.Size
 import com.example.lolify_android.data.model.Champion
-import com.example.lolify_android.ui.theme.LolifyandroidTheme
+import com.example.lolify_android.presentation.championListViewModel
+import com.google.gson.Gson
 
 @Composable
-fun ChampionList(championList: List<Champion>, modifier: Modifier = Modifier) {
+fun ChampionNavigation(championList: List<Champion>){
+    val navController = rememberNavController()
+
+    NavHost(navController = navController, startDestination = "champion_list"){
+        composable("champion_list"){
+            ChampionList(navController = navController, championList = championList)
+        }
+        composable("champion_details/{champion_id}"){ backStackEntry ->
+            val champion_id = backStackEntry.arguments!!.getInt("champion_id")
+            ChampionDetails(navController = navController, championList = championList ,champion_id = champion_id)
+        }
+    }
+}
+@Composable
+fun ChampionList(navController: NavController, championList: List<Champion>, modifier: Modifier = Modifier) {
+
     if(championList.isEmpty()){
         Box(
             modifier = Modifier
@@ -50,7 +70,7 @@ fun ChampionList(championList: List<Champion>, modifier: Modifier = Modifier) {
             contentPadding = PaddingValues(16.dp)
         ){
             items(championList.size){id ->
-                Champion(championList[id])
+                com.example.lolify_android.Champion(navController, championList[id], id)
                 Spacer(modifier = Modifier.height(16.dp))
             }
         }
@@ -58,7 +78,8 @@ fun ChampionList(championList: List<Champion>, modifier: Modifier = Modifier) {
 }
 
 @Composable
-fun Champion(champion: Champion){
+fun Champion(navController: NavController, champion: Champion, champion_id: Int){
+    val context = LocalContext.current
     val imageState = rememberAsyncImagePainter(
         model = ImageRequest.Builder(LocalContext.current).data(champion.image_link)
             .size(Size.ORIGINAL)
@@ -70,6 +91,9 @@ fun Champion(champion: Champion){
             .clip(RoundedCornerShape(20.dp))
             .fillMaxWidth()
             .background(MaterialTheme.colorScheme.primaryContainer)
+            .clickable {
+                navController.navigate("champion_details/${champion_id}")
+            }
     ){
         if(imageState is AsyncImagePainter.State.Error){
             Box(

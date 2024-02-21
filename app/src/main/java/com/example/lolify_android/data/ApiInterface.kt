@@ -5,7 +5,7 @@ import com.example.lolify_android.data.model.Champions
 
 interface ApiInterface {
 
-    @GET("champion")
+    @GET("cached/champion")
     suspend fun getChampionList(): Champions
 
     companion object{

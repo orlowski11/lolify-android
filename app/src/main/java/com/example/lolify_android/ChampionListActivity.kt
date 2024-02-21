@@ -5,19 +5,16 @@ import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.example.lolify_android.data.ChampionsRepositoryImpl
-import com.example.lolify_android.data.model.Champion
 import com.example.lolify_android.presentation.championListViewModel
 import com.example.lolify_android.ui.theme.LolifyandroidTheme
 import kotlinx.coroutines.flow.collectLatest
@@ -56,7 +53,7 @@ class ChampionListActivity : ComponentActivity() {
                         }
                     }
 
-                    ChampionList(championList)
+                    ChampionNavigation(championList)
                 }
             }
         }
