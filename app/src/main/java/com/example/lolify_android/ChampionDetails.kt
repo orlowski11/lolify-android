@@ -27,7 +27,7 @@ fun ChampionDetails(navController: NavController, championList: List<Champion>, 
         horizontalAlignment = Alignment.CenterHorizontally,
     ){
         Text(
-            text = championList[champion_id].roles[0].name,
+            text = championList[champion_id].name,
             modifier = Modifier
                 .padding(horizontal = 16.dp),
             fontSize = 17.sp,

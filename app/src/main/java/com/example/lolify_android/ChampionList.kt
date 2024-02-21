@@ -48,7 +48,7 @@ fun ChampionNavigation(championList: List<Champion>){
             ChampionList(navController = navController, championList = championList)
         }
         composable("champion_details/{champion_id}"){ backStackEntry ->
-            val champion_id = backStackEntry.arguments!!.getInt("champion_id")
+            val champion_id = backStackEntry.arguments!!.getString("champion_id")!!.toInt()
             ChampionDetails(navController = navController, championList = championList ,champion_id = champion_id)
         }
     }
