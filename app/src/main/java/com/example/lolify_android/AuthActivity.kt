@@ -20,7 +20,7 @@ class AuthActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    Homepage()
+                    AuthNavigation()
                 }
             }
         }

@@ -1,5 +1,8 @@
 package com.example.lolify_android
 
+import android.content.Context
+import android.content.Intent
+import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -21,11 +24,15 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusDirection
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
@@ -39,18 +46,35 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.lolify_android.data.ApiInterface
+import com.example.lolify_android.data.SessionManager
+import com.example.lolify_android.data.model.LoginRequest
+import com.example.lolify_android.data.model.LoginResponse
+import kotlinx.coroutines.launch
+import okhttp3.internal.wait
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 @Composable
 fun AuthNavigation(){
     val navController = rememberNavController()
+    var sessionManager: SessionManager
+    var context = LocalContext.current
 
-    NavHost(navController = navController, startDestination = "login") {
-        composable("login") {
-            LoginForm(navController = navController)
+    sessionManager = SessionManager(context)
+
+    if(sessionManager.fetchAuthToken() == null) {
+        NavHost(navController = navController, startDestination = "login") {
+            composable("login") {
+                LoginForm(navController = navController)
+            }
+            /*composable("register") {
+                RegisterForm(navController = navController)
+            }*/
         }
-        composable("register") {
-            RegisterForm(navController = navController)
-        }
+    } else{
+        LogoutForm()
     }
 }
 
@@ -125,8 +149,11 @@ fun PasswordField(
 }
 
 @Composable
-fun LoginForm() {
+fun LoginForm(navController: NavController) {
     Surface {
+        var credentials by remember { mutableStateOf(LoginRequest())}
+        val context = LocalContext.current
+        val coroutineScope = rememberCoroutineScope()
         Column(
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -135,19 +162,24 @@ fun LoginForm() {
                 .padding(horizontal = 30.dp)
         ) {
             EmailField(
-                value = "email",
-                onChange = { },
+                value = credentials.email,
+                onChange = { data -> credentials = credentials.copy(email = data)},
                 modifier = Modifier.fillMaxWidth()
             )
             PasswordField(
-                value = "password",
-                onChange = { },
+                value = credentials.password,
+                onChange = { data -> credentials = credentials.copy(password = data)},
                 submit = { },
                 modifier = Modifier.fillMaxWidth()
             )
             Spacer(modifier = Modifier.height(10.dp))
             Button(
-                onClick = { },
+                onClick = {
+                    coroutineScope.launch{
+                        Login(credentials.email, credentials.password, context)
+                    }
+                    context.startActivity(Intent(context, MainActivity::class.java))
+                },
                 enabled = true,
                 shape = RoundedCornerShape(5.dp),
                 modifier = Modifier.fillMaxWidth()
@@ -156,4 +188,68 @@ fun LoginForm() {
             }
         }
     }
+}
+
+suspend fun Login(email: String, password: String, context: Context){
+    var sessionManager: SessionManager
+    var apiClient: ApiInterface
+
+    apiClient = RetrofitInstance.api
+    sessionManager = SessionManager(context)
+
+    apiClient.login(LoginRequest(email = email, password = password))
+        .enqueue(object: Callback<LoginResponse>{
+            override fun onFailure(call: Call<LoginResponse>, T: Throwable){
+                Log.d("Error","Login error")
+            }
+            override fun onResponse(call: Call<LoginResponse>, response: Response<LoginResponse>){
+                val loginResponse = response.body()
+
+                if(loginResponse?.access_token != null) {
+                    sessionManager.saveAuthToken(loginResponse.access_token)
+                } else{
+                    Log.d("Error","Login error")
+                }
+            }
+        })
+}
+
+@Composable
+fun LogoutForm(){
+    Surface{
+        val context = LocalContext.current
+        val coroutineScope = rememberCoroutineScope()
+        Column(
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally,
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(horizontal = 30.dp)
+        ) {
+            Text(
+                text = "User name"
+            )
+            Spacer(modifier = Modifier.height(10.dp))
+            Button(
+                onClick = {
+                    coroutineScope.launch{
+                        Logout(context)
+                    }
+                    context.startActivity(Intent(context, MainActivity::class.java))
+                },
+                enabled = true,
+                shape = RoundedCornerShape(5.dp),
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Text("Logout")
+            }
+        }
+    }
+}
+
+suspend fun Logout(context: Context){
+    var sessionManager: SessionManager
+
+    sessionManager = SessionManager(context)
+    sessionManager.removeAuthToken()
 }

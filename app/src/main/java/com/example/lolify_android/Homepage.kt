@@ -26,8 +26,12 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.ui.graphics.Color
@@ -58,7 +62,16 @@ fun Homepage(modifier: Modifier = Modifier) {
                     add(GifDecoder.Factory())
                 }
             }.build()
-
+        IconButton(
+            onClick = {
+                context.startActivity(Intent(context, AuthActivity::class.java))
+            }
+        ){
+            Icon(
+                imageVector = Icons.Default.Person,
+                contentDescription = null
+            )
+        }
         Image(
             painter = rememberAsyncImagePainter(
                 ImageRequest.Builder(context).data(data = R.drawable.soraka).apply(block = {
