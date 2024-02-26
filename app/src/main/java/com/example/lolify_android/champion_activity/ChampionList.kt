@@ -1,6 +1,5 @@
-package com.example.lolify_android
+package com.example.lolify_android.champion_activity
 
-import android.content.Intent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -18,7 +17,6 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -36,8 +34,6 @@ import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
 import coil.size.Size
 import com.example.lolify_android.data.model.Champion
-import com.example.lolify_android.presentation.championListViewModel
-import com.google.gson.Gson
 
 @Composable
 fun ChampionNavigation(championList: List<Champion>){
@@ -70,7 +66,7 @@ fun ChampionList(navController: NavController, championList: List<Champion>, mod
             contentPadding = PaddingValues(16.dp)
         ){
             items(championList.size){id ->
-                com.example.lolify_android.Champion(navController, championList[id], id)
+                Champion(navController, championList[id], id)
                 Spacer(modifier = Modifier.height(16.dp))
             }
         }

@@ -1,4 +1,4 @@
-package com.example.lolify_android
+package com.example.lolify_android.champion_activity
 
 import android.os.Bundle
 import android.widget.Toast
@@ -14,6 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import com.example.lolify_android.RetrofitInstance
 import com.example.lolify_android.data.ChampionsRepositoryImpl
 import com.example.lolify_android.presentation.championListViewModel
 import com.example.lolify_android.ui.theme.LolifyandroidTheme

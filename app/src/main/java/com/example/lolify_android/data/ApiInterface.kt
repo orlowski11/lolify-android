@@ -4,6 +4,7 @@ import retrofit2.http.GET
 import com.example.lolify_android.data.model.Champions
 import com.example.lolify_android.data.model.LoginRequest
 import com.example.lolify_android.data.model.LoginResponse
+import com.example.lolify_android.data.model.RegisterRequest
 import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.POST
@@ -15,6 +16,9 @@ interface ApiInterface {
 
     @POST("login")
     fun login(@Body request: LoginRequest): Call<LoginResponse>
+
+    @POST("register")
+    fun register(@Body request: RegisterRequest): Call<LoginResponse>
 
     companion object{
         const val BASE_URL = "https://lolify.fly.dev/api/"

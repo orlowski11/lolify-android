@@ -1,4 +1,4 @@
-package com.example.lolify_android
+package com.example.lolify_android.auth_activity
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
