@@ -14,16 +14,23 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.font.FontWeight
 import coil.ImageLoader
 import coil.compose.rememberAsyncImagePainter
 import coil.decode.GifDecoder
@@ -36,6 +43,33 @@ import com.example.lolify_android.ui.theme.AppFont
 
 @Composable
 fun Homepage(modifier: Modifier = Modifier) {
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.End
+    ){
+        val context = LocalContext.current
+
+        IconButton(
+            onClick = {
+                context.startActivity(Intent(context, AuthActivity::class.java))
+            },
+            modifier = modifier
+                .padding(10.dp)
+                .border(
+                    1.dp,
+                    MaterialTheme.colorScheme.tertiary,
+                    shape = CircleShape
+                )
+
+        ){
+            Icon(
+                imageVector = Icons.Default.Person,
+                contentDescription = null,
+                tint = MaterialTheme.colorScheme.tertiary
+            )
+        }
+    }
+
     Column (
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -50,16 +84,7 @@ fun Homepage(modifier: Modifier = Modifier) {
                     add(GifDecoder.Factory())
                 }
             }.build()
-        IconButton(
-            onClick = {
-                context.startActivity(Intent(context, AuthActivity::class.java))
-            }
-        ){
-            Icon(
-                imageVector = Icons.Default.Person,
-                contentDescription = null
-            )
-        }
+
         Image(
             painter = rememberAsyncImagePainter(
                 ImageRequest.Builder(context).data(data = R.drawable.soraka).apply(block = {
@@ -73,9 +98,12 @@ fun Homepage(modifier: Modifier = Modifier) {
 
         Text(
             text = "Champions in League",
-            fontSize = 30.sp,
+            fontSize = 24.sp,
             lineHeight = 40.sp,
             textAlign = TextAlign.Center,
+            fontFamily = AppFont.Montserrat,
+            fontWeight = FontWeight.Bold,
+            color = MaterialTheme.colorScheme.tertiary,
             modifier = modifier.padding(12.dp)
         )
 
@@ -86,6 +114,8 @@ fun Homepage(modifier: Modifier = Modifier) {
                     "a decisive turn",
             fontSize = 12.sp,
             textAlign = TextAlign.Justify,
+            fontFamily = AppFont.Montserrat,
+            color = MaterialTheme.colorScheme.tertiary,
             modifier = modifier.padding(12.dp)
         )
 
@@ -97,7 +127,11 @@ fun Homepage(modifier: Modifier = Modifier) {
             },
             colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.tertiary)
         ){
-            Text("Go to champions", fontFamily = AppFont.Montserrat)
+            Text(
+                "Go to champions",
+                fontFamily = AppFont.Montserrat,
+                color = MaterialTheme.colorScheme.primary
+            )
         }
     }
 }

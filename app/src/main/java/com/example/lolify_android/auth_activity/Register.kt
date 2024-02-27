@@ -14,6 +14,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -36,6 +38,7 @@ import com.example.lolify_android.data.SessionManager
 import com.example.lolify_android.data.model.LoginRequest
 import com.example.lolify_android.data.model.LoginResponse
 import com.example.lolify_android.data.model.RegisterRequest
+import com.example.lolify_android.ui.theme.AppFont
 import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
@@ -70,7 +73,7 @@ fun RegisterForm(navController: NavController) {
                 submit = { },
                 modifier = Modifier.fillMaxWidth()
             )
-            PasswordField(
+            PasswordConfirmationField(
                 value = credentials.password_confirmation,
                 onChange = { data -> credentials = credentials.copy(password_confirmation = data)},
                 submit = { },
@@ -92,34 +95,34 @@ fun RegisterForm(navController: NavController) {
                 },
                 enabled = true,
                 shape = RoundedCornerShape(5.dp),
+                colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.tertiary),
                 modifier = Modifier.fillMaxWidth()
             ) {
-                Text("Register")
+                Text(
+                    "Register",
+                    fontFamily = AppFont.Montserrat,
+                    color = MaterialTheme.colorScheme.primary
+                )
             }
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
+
+            Text(
+                text = "Already have an account?",
+                fontSize = 12.sp,
+                textAlign = TextAlign.Justify,
                 modifier = Modifier
-                    .fillMaxSize()
-                    .padding(horizontal = 10.dp)
-            ){
-                Text(
-                    text = "Already have an account?",
-                    fontSize = 12.sp,
-                    textAlign = TextAlign.Justify,
-                    modifier = Modifier
-                        .padding(10.dp)
-                )
-                Text(
-                    text = "Login",
-                    fontSize = 12.sp,
-                    textAlign = TextAlign.Justify,
-                    modifier = Modifier
-                        .padding(10.dp)
-                        .clickable {
-                            navController.navigate("login")
-                        }
-                )
-            }
+                    .padding(10.dp)
+            )
+            Text(
+                text = "Login",
+                fontSize = 12.sp,
+                textAlign = TextAlign.Justify,
+                modifier = Modifier
+                    .padding(10.dp)
+                    .clickable {
+                        navController.navigate("login")
+                    }
+            )
+
         }
     }
 }

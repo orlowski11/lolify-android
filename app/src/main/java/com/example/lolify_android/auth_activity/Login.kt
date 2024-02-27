@@ -14,6 +14,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -36,14 +38,18 @@ import com.example.lolify_android.data.ApiInterface
 import com.example.lolify_android.data.SessionManager
 import com.example.lolify_android.data.model.LoginRequest
 import com.example.lolify_android.data.model.LoginResponse
+import com.example.lolify_android.ui.theme.AppFont
 import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
+val showError = mutableStateOf(false)
 @Composable
 fun LoginForm(navController: NavController) {
-    Surface {
+    Surface (
+        color = MaterialTheme.colorScheme.primary
+    ){
         var credentials by remember { mutableStateOf(LoginRequest()) }
         val context = LocalContext.current
         val coroutineScope = rememberCoroutineScope()
@@ -74,32 +80,46 @@ fun LoginForm(navController: NavController) {
                 },
                 enabled = true,
                 shape = RoundedCornerShape(5.dp),
+                colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.tertiary),
                 modifier = Modifier.fillMaxWidth()
             ) {
-                Text("Login")
-            }
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(horizontal = 10.dp)
-            ){
                 Text(
-                    text = "Don't have an account yet?",
+                    "Login",
+                    fontFamily = AppFont.Montserrat,
+                    color = MaterialTheme.colorScheme.primary
+                )
+            }
+            if(showError.value){
+                Text(
+                    text = "These credentials don't match our records",
                     fontSize = 12.sp,
-                    textAlign = TextAlign.Justify,
+                    textAlign = TextAlign.Center,
+                    color = MaterialTheme.colorScheme.error,
                     modifier = Modifier
                         .padding(10.dp)
                 )
+            }
+            Text(
+                text = "Don't have an account yet?",
+                fontSize = 12.sp,
+                textAlign = TextAlign.Justify,
+                color = MaterialTheme.colorScheme.tertiary,
+                modifier = Modifier
+                    .padding(10.dp)
+            )
+            Button(
+                onClick = {
+                    navController.navigate("register")
+                },
+                enabled = true,
+                shape = RoundedCornerShape(5.dp),
+                colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.secondary),
+                modifier = Modifier.fillMaxWidth()
+            ) {
                 Text(
-                    text = "Register",
-                    fontSize = 12.sp,
-                    textAlign = TextAlign.Justify,
-                    modifier = Modifier
-                        .padding(10.dp)
-                        .clickable {
-                            navController.navigate("register")
-                        }
+                    "Register",
+                    fontFamily = AppFont.Montserrat,
+                    color = MaterialTheme.colorScheme.tertiary
                 )
             }
         }
@@ -117,6 +137,7 @@ suspend fun Login(email: String, password: String, context: Context){
         .enqueue(object: Callback<LoginResponse> {
             override fun onFailure(call: Call<LoginResponse>, T: Throwable){
                 Log.d("Error","Login error")
+                showError.value = true
             }
             override fun onResponse(call: Call<LoginResponse>, response: Response<LoginResponse>){
                 val loginResponse = response.body()
@@ -126,6 +147,7 @@ suspend fun Login(email: String, password: String, context: Context){
                     context.startActivity(Intent(context, MainActivity::class.java))
                 } else{
                     Log.d("Error","Login error")
+                    showError.value = true
                 }
             }
         })

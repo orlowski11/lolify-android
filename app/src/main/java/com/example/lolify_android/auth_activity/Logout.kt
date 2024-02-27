@@ -11,6 +11,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -21,6 +23,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import com.example.lolify_android.MainActivity
 import com.example.lolify_android.data.SessionManager
+import com.example.lolify_android.ui.theme.AppFont
 import kotlinx.coroutines.launch
 
 @Composable
@@ -48,9 +51,14 @@ fun LogoutForm(){
                 },
                 enabled = true,
                 shape = RoundedCornerShape(5.dp),
+                colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.tertiary),
                 modifier = Modifier.fillMaxWidth()
             ) {
-                Text("Logout")
+                Text(
+                    "Logout",
+                    fontFamily = AppFont.Montserrat,
+                    color = MaterialTheme.colorScheme.primary
+                )
             }
         }
     }

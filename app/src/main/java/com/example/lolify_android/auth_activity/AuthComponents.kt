@@ -12,6 +12,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusDirection
@@ -21,6 +22,19 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun LolifyTextFieldColors() = TextFieldDefaults.textFieldColors(
+    containerColor = MaterialTheme.colorScheme.onPrimaryContainer,
+    unfocusedTextColor = MaterialTheme.colorScheme.tertiary,
+    focusedTextColor = MaterialTheme.colorScheme.tertiary,
+    disabledTextColor = MaterialTheme.colorScheme.tertiary,
+    unfocusedLabelColor = MaterialTheme.colorScheme.tertiary,
+    unfocusedPlaceholderColor = MaterialTheme.colorScheme.tertiary,
+    focusedPlaceholderColor = MaterialTheme.colorScheme.tertiary,
+    cursorColor = MaterialTheme.colorScheme.tertiary,
+)
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun EmailField(
     value: String,
@@ -30,11 +44,11 @@ fun EmailField(
     placeholder: String = "Enter your email"
 ){
     val focusManager = LocalFocusManager.current
-    val leadingIcon = @Composable {
+    val trailingIcon = @Composable {
         Icon(
             Icons.Default.Email,
             contentDescription = null,
-            tint = MaterialTheme.colorScheme.primary
+            tint = MaterialTheme.colorScheme.tertiary
         )
     }
 
@@ -42,7 +56,7 @@ fun EmailField(
         value = value,
         onValueChange = onChange,
         modifier = modifier,
-        leadingIcon = leadingIcon,
+        trailingIcon = trailingIcon,
         keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
         keyboardActions = KeyboardActions(
             onNext = { focusManager.moveFocus(FocusDirection.Down) }
@@ -50,7 +64,8 @@ fun EmailField(
         placeholder = { Text(placeholder) },
         label = { Text(label) },
         singleLine = true,
-        visualTransformation = VisualTransformation.None
+        visualTransformation = VisualTransformation.None,
+        colors = LolifyTextFieldColors()
     )
 }
 
@@ -63,11 +78,11 @@ fun NameField(
     placeholder: String = "Enter your name"
 ){
     val focusManager = LocalFocusManager.current
-    val leadingIcon = @Composable {
+    val trailingIcon = @Composable {
         Icon(
             Icons.Default.Person,
             contentDescription = null,
-            tint = MaterialTheme.colorScheme.primary
+            tint = MaterialTheme.colorScheme.tertiary
         )
     }
 
@@ -75,7 +90,7 @@ fun NameField(
         value = value,
         onValueChange = onChange,
         modifier = modifier,
-        leadingIcon = leadingIcon,
+        trailingIcon = trailingIcon,
         keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
         keyboardActions = KeyboardActions(
             onNext = { focusManager.moveFocus(FocusDirection.Down) }
@@ -83,7 +98,8 @@ fun NameField(
         placeholder = { Text(placeholder) },
         label = { Text(label) },
         singleLine = true,
-        visualTransformation = VisualTransformation.None
+        visualTransformation = VisualTransformation.None,
+        colors = LolifyTextFieldColors()
     )
 }
 
@@ -97,11 +113,11 @@ fun PasswordField(
     placeholder: String = "Enter your Password"
 ) {
 
-    val leadingIcon = @Composable {
+    val trailingIcon = @Composable {
         Icon(
             Icons.Default.Lock,
             contentDescription = "",
-            tint = MaterialTheme.colorScheme.primary
+            tint = MaterialTheme.colorScheme.tertiary
         )
     }
 
@@ -109,7 +125,7 @@ fun PasswordField(
         value = value,
         onValueChange = onChange,
         modifier = modifier,
-        leadingIcon = leadingIcon,
+        trailingIcon = trailingIcon,
         keyboardOptions = KeyboardOptions(
             imeAction = ImeAction.Done,
             keyboardType = KeyboardType.Password
@@ -120,7 +136,8 @@ fun PasswordField(
         placeholder = { Text(placeholder) },
         label = { Text(label) },
         singleLine = true,
-        visualTransformation = PasswordVisualTransformation()
+        visualTransformation = PasswordVisualTransformation(),
+        colors = LolifyTextFieldColors()
     )
 }
 
@@ -134,11 +151,11 @@ fun PasswordConfirmationField(
     placeholder: String = "Confirm your Password"
 ) {
 
-    val leadingIcon = @Composable {
+    val trailingIcon = @Composable {
         Icon(
             Icons.Default.Lock,
             contentDescription = "",
-            tint = MaterialTheme.colorScheme.primary
+            tint = MaterialTheme.colorScheme.tertiary
         )
     }
 
@@ -146,7 +163,7 @@ fun PasswordConfirmationField(
         value = value,
         onValueChange = onChange,
         modifier = modifier,
-        leadingIcon = leadingIcon,
+        trailingIcon = trailingIcon,
         keyboardOptions = KeyboardOptions(
             imeAction = ImeAction.Done,
             keyboardType = KeyboardType.Password
@@ -157,6 +174,7 @@ fun PasswordConfirmationField(
         placeholder = { Text(placeholder) },
         label = { Text(label) },
         singleLine = true,
-        visualTransformation = PasswordVisualTransformation()
+        visualTransformation = PasswordVisualTransformation(),
+        colors = LolifyTextFieldColors()
     )
 }
