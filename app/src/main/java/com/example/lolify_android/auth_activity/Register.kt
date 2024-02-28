@@ -44,9 +44,16 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
+val showEmailError = mutableStateOf(false)
+val showNameError = mutableStateOf(false)
+val showPasswordError = mutableStateOf(false)
+val showPasswordConfirmError = mutableStateOf(false)
+
 @Composable
 fun RegisterForm(navController: NavController) {
-    Surface {
+    Surface(
+        color = MaterialTheme.colorScheme.primary
+    ){
         var credentials by remember { mutableStateOf(RegisterRequest()) }
         val context = LocalContext.current
         val coroutineScope = rememberCoroutineScope()
@@ -82,16 +89,27 @@ fun RegisterForm(navController: NavController) {
             Spacer(modifier = Modifier.height(10.dp))
             Button(
                 onClick = {
-                    coroutineScope.launch{
-                        Register(
-                            credentials.email,
-                            credentials.name,
-                            credentials.password,
-                            credentials.password_confirmation,
-                            context
-                        )
+                    showEmailError.value = !isValidEmail(credentials.email)
+                    showNameError.value = credentials.name.isEmpty()
+                    showPasswordError.value = credentials.password.length <= 8
+                    showPasswordConfirmError.value = credentials.password != credentials.password_confirmation
+
+                    if(
+                        showEmailError.value == false
+                        && showNameError.value == false
+                        && showPasswordError.value == false
+                        && showPasswordConfirmError.value == false
+                    ) {
+                        coroutineScope.launch {
+                            Register(
+                                credentials.email,
+                                credentials.name,
+                                credentials.password,
+                                credentials.password_confirmation,
+                                context
+                            )
+                        }
                     }
-                    context.startActivity(Intent(context, MainActivity::class.java))
                 },
                 enabled = true,
                 shape = RoundedCornerShape(5.dp),
@@ -104,24 +122,70 @@ fun RegisterForm(navController: NavController) {
                     color = MaterialTheme.colorScheme.primary
                 )
             }
+            if(showEmailError.value){
+                Text(
+                    text = "Email is not valid",
+                    fontSize = 12.sp,
+                    textAlign = TextAlign.Center,
+                    color = MaterialTheme.colorScheme.error,
+                    modifier = Modifier
+                        .padding(10.dp)
+                )
+            }
+            if(showNameError.value){
+                Text(
+                    text = "Name cannot be empty",
+                    fontSize = 12.sp,
+                    textAlign = TextAlign.Center,
+                    color = MaterialTheme.colorScheme.error,
+                    modifier = Modifier
+                        .padding(10.dp)
+                )
+            }
+            if(showPasswordError.value){
+                Text(
+                    text = "Password must be at least 8 characters long",
+                    fontSize = 12.sp,
+                    textAlign = TextAlign.Center,
+                    color = MaterialTheme.colorScheme.error,
+                    modifier = Modifier
+                        .padding(10.dp)
+                )
+            }
+            if(showPasswordConfirmError.value){
+                Text(
+                    text = "Passwords don't match",
+                    fontSize = 12.sp,
+                    textAlign = TextAlign.Center,
+                    color = MaterialTheme.colorScheme.error,
+                    modifier = Modifier
+                        .padding(10.dp)
+                )
+            }
 
             Text(
                 text = "Already have an account?",
                 fontSize = 12.sp,
                 textAlign = TextAlign.Justify,
+                color = MaterialTheme.colorScheme.tertiary,
                 modifier = Modifier
                     .padding(10.dp)
             )
-            Text(
-                text = "Login",
-                fontSize = 12.sp,
-                textAlign = TextAlign.Justify,
-                modifier = Modifier
-                    .padding(10.dp)
-                    .clickable {
-                        navController.navigate("login")
-                    }
-            )
+            Button(
+                onClick = {
+                    navController.navigate("login")
+                },
+                enabled = true,
+                shape = RoundedCornerShape(5.dp),
+                colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.secondary),
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Text(
+                    "Login",
+                    fontFamily = AppFont.Montserrat,
+                    color = MaterialTheme.colorScheme.tertiary
+                )
+            }
 
         }
     }
@@ -154,9 +218,15 @@ suspend fun Register(
 
                 if(loginResponse?.access_token != null) {
                     sessionManager.saveAuthToken(loginResponse.access_token)
+                    context.startActivity(Intent(context, MainActivity::class.java))
                 } else{
                     Log.d("Error","Register error")
                 }
             }
         })
+}
+
+fun isValidEmail(email: String): Boolean {
+    val emailRegex = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+".toRegex()
+    return email.matches(emailRegex)
 }

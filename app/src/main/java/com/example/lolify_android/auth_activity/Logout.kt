@@ -28,7 +28,9 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun LogoutForm(){
-    Surface{
+    Surface(
+        color = MaterialTheme.colorScheme.primary
+    ){
         val context = LocalContext.current
         val coroutineScope = rememberCoroutineScope()
         Column(
@@ -39,7 +41,8 @@ fun LogoutForm(){
                 .padding(horizontal = 30.dp)
         ) {
             Text(
-                text = "User name"
+                text = "User name",
+                color = MaterialTheme.colorScheme.tertiary
             )
             Spacer(modifier = Modifier.height(10.dp))
             Button(
