@@ -19,9 +19,8 @@ import com.example.lolify_android.data.ChampionsRepositoryImpl
 import com.example.lolify_android.presentation.championListViewModel
 import com.example.lolify_android.ui.theme.LolifyandroidTheme
 import kotlinx.coroutines.flow.collectLatest
-import okhttp3.internal.wait
 
-class ChampionListActivity : ComponentActivity() {
+class ChampionDetailsActivity : ComponentActivity() {
 
     private val viewModel by viewModels<championListViewModel>(factoryProducer = {
         object : ViewModelProvider.Factory {
@@ -44,6 +43,9 @@ class ChampionListActivity : ComponentActivity() {
 
                     val championList = viewModel.champions.collectAsState().value
                     val context = LocalContext.current
+                    val id = intent.getStringExtra("champion_id")!!.toInt()
+                    val likesIt = intent.getStringExtra("likes_it")!!.toBoolean()
+
 
                     LaunchedEffect(key1 = viewModel.showErrorToastChannel){
                         viewModel.showErrorToastChannel.collectLatest { show ->
@@ -55,7 +57,7 @@ class ChampionListActivity : ComponentActivity() {
                         }
                     }
 
-                    ChampionList(championList)
+                    ChampionDetails(championList, id, likesIt,this)
                 }
             }
         }

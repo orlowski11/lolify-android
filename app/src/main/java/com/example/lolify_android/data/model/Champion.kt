@@ -1,17 +1,17 @@
 package com.example.lolify_android.data.model
 
 data class Champion(
-    val id: Int,
-    val created_at: String,
-    val current_user_likes_it: Boolean,
-    val description: String,
-    val image_link: String,
-    val likes_count: Int,
-    val name: String,
-    val roles: List<Role>,
-    val skills: List<Skill>,
-    val skins: List<Skin>,
-    val title: String,
-    val updated_at: String,
-    val users_that_liked: List<UsersThatLiked>
+    var id: Int,
+    var created_at: String,
+    var current_user_likes_it: Boolean,
+    var description: String,
+    var image_link: String,
+    var likes_count: Int,
+    var name: String,
+    var roles: List<Role>,
+    var skills: List<Skill>,
+    var skins: List<Skin>,
+    var title: String,
+    var updated_at: String,
+    var users_that_liked: List<UsersThatLiked>
 )

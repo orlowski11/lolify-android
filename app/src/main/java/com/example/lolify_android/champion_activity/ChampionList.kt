@@ -1,5 +1,7 @@
 package com.example.lolify_android.champion_activity
 
+import android.content.Intent
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -33,24 +35,16 @@ import coil.compose.AsyncImagePainter
 import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
 import coil.size.Size
+import com.example.lolify_android.RetrofitInstance
+import com.example.lolify_android.data.ApiInterface
+import com.example.lolify_android.data.SessionManager
 import com.example.lolify_android.data.model.Champion
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 @Composable
-fun ChampionNavigation(championList: List<Champion>){
-    val navController = rememberNavController()
-
-    NavHost(navController = navController, startDestination = "champion_list"){
-        composable("champion_list"){
-            ChampionList(navController = navController, championList = championList)
-        }
-        composable("champion_details/{champion_id}"){ backStackEntry ->
-            val champion_id = backStackEntry.arguments!!.getString("champion_id")!!.toInt()
-            ChampionDetails(navController = navController, championList = championList ,champion_id = champion_id)
-        }
-    }
-}
-@Composable
-fun ChampionList(navController: NavController, championList: List<Champion>, modifier: Modifier = Modifier) {
+fun ChampionList(championList: List<Champion>, modifier: Modifier = Modifier) {
 
     if(championList.isEmpty()){
         Box(
@@ -66,7 +60,7 @@ fun ChampionList(navController: NavController, championList: List<Champion>, mod
             contentPadding = PaddingValues(16.dp)
         ){
             items(championList.size){id ->
-                Champion(navController, championList[id], id)
+                Champion(championList[id], id)
                 Spacer(modifier = Modifier.height(16.dp))
             }
         }
@@ -74,7 +68,7 @@ fun ChampionList(navController: NavController, championList: List<Champion>, mod
 }
 
 @Composable
-fun Champion(navController: NavController, champion: Champion, champion_id: Int){
+fun Champion(champion: Champion, champion_id: Int){
     val context = LocalContext.current
     val imageState = rememberAsyncImagePainter(
         model = ImageRequest.Builder(LocalContext.current).data(champion.image_link)
@@ -82,13 +76,32 @@ fun Champion(navController: NavController, champion: Champion, champion_id: Int)
             .build()
     ).state
 
+    var sessionManager: SessionManager
+    var apiClient: ApiInterface
+
+    apiClient = RetrofitInstance.api
+    sessionManager = SessionManager(context)
+    val token = sessionManager.fetchAuthToken()!!
+
     Column(
         modifier = Modifier
             .clip(RoundedCornerShape(20.dp))
             .fillMaxWidth()
             .background(MaterialTheme.colorScheme.primaryContainer)
             .clickable {
-                navController.navigate("champion_details/${champion_id}")
+                apiClient.getChampion(champion.id.toString(),"Bearer $token")
+                    .enqueue(object: Callback<Champion> {
+                        override fun onFailure(call: Call<Champion>, t: Throwable){
+                            Log.e("Error", t.message.toString())
+                        }
+
+                        override fun onResponse(call: Call<Champion>, response: Response<Champion>){
+                            val intent = Intent(context, ChampionDetailsActivity::class.java)
+                            intent.putExtra("champion_id", champion_id.toString())
+                            intent.putExtra("likes_it", response.body()!!.current_user_likes_it.toString())
+                            context.startActivity(intent)
+                        }
+                    })
             }
     ){
         if(imageState is AsyncImagePainter.State.Error){

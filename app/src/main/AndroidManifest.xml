@@ -24,6 +24,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".champion_activity.ChampionListActivity"></activity>
+        <activity android:name=".champion_activity.ChampionDetailsActivity"></activity>
         <activity android:name=".auth_activity.AuthActivity"></activity>
     </application>
 
