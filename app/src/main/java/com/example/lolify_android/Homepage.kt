@@ -38,7 +38,9 @@ import coil.decode.ImageDecoderDecoder
 import coil.request.ImageRequest
 import coil.size.Size
 import com.example.lolify_android.auth_activity.AuthActivity
+import com.example.lolify_android.champion_activity.ChampionDetailsActivity
 import com.example.lolify_android.champion_activity.ChampionListActivity
+import com.example.lolify_android.profile_activity.ProfileActivity
 import com.example.lolify_android.ui.theme.AppFont
 
 @Composable
@@ -52,6 +54,28 @@ fun Homepage(modifier: Modifier = Modifier) {
         IconButton(
             onClick = {
                 context.startActivity(Intent(context, AuthActivity::class.java))
+            },
+            modifier = modifier
+                .padding(10.dp)
+                .border(
+                    1.dp,
+                    MaterialTheme.colorScheme.tertiary,
+                    shape = CircleShape
+                )
+
+        ){
+            Icon(
+                imageVector = Icons.Default.Person,
+                contentDescription = null,
+                tint = MaterialTheme.colorScheme.tertiary
+            )
+        }
+
+        IconButton(
+            onClick = {
+                val intent = Intent(context, ProfileActivity::class.java)
+                intent.putExtra("user_name", "lajk")
+                context.startActivity(intent)
             },
             modifier = modifier
                 .padding(10.dp)

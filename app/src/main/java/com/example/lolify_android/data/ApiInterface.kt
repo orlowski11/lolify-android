@@ -5,6 +5,7 @@ import retrofit2.http.GET
 import com.example.lolify_android.data.model.Champions
 import com.example.lolify_android.data.model.LoginRequest
 import com.example.lolify_android.data.model.LoginResponse
+import com.example.lolify_android.data.model.Profile
 import com.example.lolify_android.data.model.RegisterRequest
 import com.example.lolify_android.data.model.User
 import okhttp3.ResponseBody
@@ -25,6 +26,12 @@ interface ApiInterface {
         @Path("champion_id") championId: String,
         @Header("Authorization") token: String
     ): Call<Champion>
+
+    @GET("profile/{user_name}")
+    suspend fun getUserProfile(
+        @Path("user_name") username: String,
+        @Header("Authorization") token: String
+    ): Profile
 
     @POST("login")
     fun login(@Body request: LoginRequest): Call<LoginResponse>

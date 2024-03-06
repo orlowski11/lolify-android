@@ -136,7 +136,7 @@ suspend fun Login(email: String, password: String, context: Context){
     apiClient.login(LoginRequest(email = email, password = password))
         .enqueue(object: Callback<LoginResponse> {
             override fun onFailure(call: Call<LoginResponse>, T: Throwable){
-                Log.d("Error","Login error")
+                Log.d("Error", T.message.toString())
                 showError.value = true
             }
             override fun onResponse(call: Call<LoginResponse>, response: Response<LoginResponse>){
