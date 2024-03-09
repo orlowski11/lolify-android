@@ -14,18 +14,29 @@ class SessionManager (context: Context){
     }
 
     fun saveAuthToken(token: String){
+        val currentTime = System.currentTimeMillis()
+        val expirationTimestamp = currentTime + 3600000 // 1 hour in milliseconds
         val editor = prefs.edit()
         editor.putString(USER_TOKEN, token)
+        editor.putLong("$USER_TOKEN.expiration", expirationTimestamp)
         editor.apply()
     }
 
     fun removeAuthToken(){
         val editor = prefs.edit()
         editor.remove(USER_TOKEN)
+        editor.remove("$USER_TOKEN.expiration")
         editor.apply()
     }
 
     fun fetchAuthToken(): String?{
-        return prefs.getString(USER_TOKEN, null)
+        val expirationTimestamp = prefs.getLong("$USER_TOKEN.expiration", -1)
+        val currentTime= System.currentTimeMillis()
+        return if (expirationTimestamp > currentTime){
+            prefs.getString(USER_TOKEN, null)
+        } else {
+            removeAuthToken()
+            null
+        }
     }
 }
