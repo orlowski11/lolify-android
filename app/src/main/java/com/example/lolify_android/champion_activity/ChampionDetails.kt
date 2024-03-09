@@ -1,5 +1,6 @@
 package com.example.lolify_android.champion_activity
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
@@ -18,6 +19,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
@@ -28,6 +30,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.example.lolify_android.BottomNavigationBar
 import com.example.lolify_android.MainActivity
 import com.example.lolify_android.RetrofitInstance
 import com.example.lolify_android.auth_activity.Login
@@ -53,6 +56,7 @@ import retrofit2.await
 import retrofit2.awaitResponse
 import kotlin.properties.Delegates
 
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun ChampionDetails(
     championList: List<Champion>,
@@ -65,72 +69,76 @@ fun ChampionDetails(
     val coroutineScope = rememberCoroutineScope()
     val context = LocalContext.current
 
-    if (championList.isEmpty()) {
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-        ) {
-            CircularProgressIndicator()
-        }
-    } else {
-        val champion = championList[champion_id]
-        Column(
-            modifier = Modifier.fillMaxSize(),
-            horizontalAlignment = Alignment.CenterHorizontally,
-        ) {
-            Text(
-                text = champion.name,
+    Scaffold(
+        bottomBar = { BottomNavigationBar(selectedScreen = "champions", context = context) }
+    ) {
+        if (championList.isEmpty()) {
+            Box(
                 modifier = Modifier
-                    .padding(horizontal = 16.dp),
-                fontSize = 17.sp,
-                fontWeight = FontWeight.SemiBold
-            )
+                    .fillMaxSize()
+            ) {
+                CircularProgressIndicator()
+            }
+        } else {
+            val champion = championList[champion_id]
+            Column(
+                modifier = Modifier.fillMaxSize(),
+                horizontalAlignment = Alignment.CenterHorizontally,
+            ) {
+                Text(
+                    text = champion.name,
+                    modifier = Modifier
+                        .padding(horizontal = 16.dp),
+                    fontSize = 17.sp,
+                    fontWeight = FontWeight.SemiBold
+                )
 
-            Text(
-                text = champion.likes_count.toString(),
-                modifier = Modifier
-                    .padding(horizontal = 16.dp),
-                fontSize = 17.sp,
-                fontWeight = FontWeight.SemiBold
-            )
+                Text(
+                    text = champion.likes_count.toString(),
+                    modifier = Modifier
+                        .padding(horizontal = 16.dp),
+                    fontSize = 17.sp,
+                    fontWeight = FontWeight.SemiBold
+                )
 
-            Text(
-                text = likesIt.toString(),
-                modifier = Modifier
-                    .padding(horizontal = 16.dp),
-                fontSize = 17.sp,
-                fontWeight = FontWeight.SemiBold
-            )
+                Text(
+                    text = likesIt.toString(),
+                    modifier = Modifier
+                        .padding(horizontal = 16.dp),
+                    fontSize = 17.sp,
+                    fontWeight = FontWeight.SemiBold
+                )
 
-            Button(
-                onClick = {
-                    coroutineScope.launch {
-                        like(
-                            context,
-                            champion.id.toString(),
-                            champion_id.toString(),
-                            likesIt,
-                            activity
+                Button(
+                    onClick = {
+                        coroutineScope.launch {
+                            like(
+                                context,
+                                champion.id.toString(),
+                                champion_id.toString(),
+                                likesIt,
+                                activity
+                            )
+                        }
+                    },
+                    enabled = true,
+                    shape = RoundedCornerShape(5.dp),
+                    colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.tertiary),
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    if (likesIt) {
+                        Text(
+                            "Dislike",
+                            fontFamily = AppFont.Montserrat,
+                            color = MaterialTheme.colorScheme.primary
+                        )
+                    } else {
+                        Text(
+                            "Like",
+                            fontFamily = AppFont.Montserrat,
+                            color = MaterialTheme.colorScheme.primary
                         )
                     }
-                },
-                enabled = true,
-                shape = RoundedCornerShape(5.dp),
-                colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.tertiary),
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                if(likesIt){
-                    Text(
-                        "Dislike",
-                        fontFamily = AppFont.Montserrat,
-                        color = MaterialTheme.colorScheme.primary
-                    )
-                } else{
-                    Text(
-                        "Like",
-                        fontFamily = AppFont.Montserrat,
-                        color = MaterialTheme.colorScheme.primary
-                    )
                 }
             }
         }
@@ -150,21 +158,25 @@ suspend fun like(
 
     apiClient = RetrofitInstance.api
     sessionManager = SessionManager(context)
-    val token = sessionManager.fetchAuthToken()!!
+    val token = sessionManager.fetchAuthToken()
 
-    if(likesIt){
-        apiClient.dislike(championId, "Bearer $token")
-            .await()
-    } else{
-        apiClient.like(championId, "Bearer $token")
-            .await()
+    if (token != null) {
+        if (likesIt) {
+            apiClient.dislike(championId, "Bearer $token")
+                .await()
+        } else {
+            apiClient.like(championId, "Bearer $token")
+                .await()
+        }
+
+        var likesIt = !likesIt
+
+        val intent = Intent(context, ChampionDetailsActivity::class.java)
+        intent.putExtra("champion_id", championListId)
+        intent.putExtra("likes_it", likesIt.toString())
+        context.startActivity(intent)
+        activity.finish()
+    } else {
+
     }
-
-    var likesIt = !likesIt
-
-    val intent = Intent(context, ChampionDetailsActivity::class.java)
-    intent.putExtra("champion_id", championListId)
-    intent.putExtra("likes_it", likesIt.toString())
-    context.startActivity(intent)
-    activity.finish()
 }

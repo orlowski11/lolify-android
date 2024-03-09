@@ -1,10 +1,12 @@
 package com.example.lolify_android.champion_activity
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -17,6 +19,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -35,6 +38,7 @@ import coil.compose.AsyncImagePainter
 import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
 import coil.size.Size
+import com.example.lolify_android.BottomNavigationBar
 import com.example.lolify_android.RetrofitInstance
 import com.example.lolify_android.data.ApiInterface
 import com.example.lolify_android.data.SessionManager
@@ -43,25 +47,37 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun ChampionList(championList: List<Champion>, modifier: Modifier = Modifier) {
+    val context = LocalContext.current
 
-    if(championList.isEmpty()){
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-        ) {
-            CircularProgressIndicator()
-        }
-    } else {
-        LazyColumn(
-            modifier = Modifier.fillMaxSize(),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            contentPadding = PaddingValues(16.dp)
-        ){
-            items(championList.size){id ->
-                Champion(championList[id], id)
-                Spacer(modifier = Modifier.height(16.dp))
+    Scaffold(
+        bottomBar = { BottomNavigationBar(selectedScreen = "champions", context = context) }
+    ) {
+        if (championList.isEmpty()) {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+            ) {
+                CircularProgressIndicator()
+            }
+        } else {
+            Column(
+                verticalArrangement = Arrangement.Top,
+                horizontalAlignment = Alignment.CenterHorizontally,
+                modifier = modifier.padding(8.dp)
+            ) {
+                LazyColumn(
+                    modifier = Modifier.fillMaxSize(),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    contentPadding = PaddingValues(16.dp)
+                ) {
+                    items(championList.size) { id ->
+                        Champion(championList[id], id)
+                        Spacer(modifier = Modifier.height(16.dp))
+                    }
+                }
             }
         }
     }
@@ -81,7 +97,7 @@ fun Champion(champion: Champion, champion_id: Int){
 
     apiClient = RetrofitInstance.api
     sessionManager = SessionManager(context)
-    val token = sessionManager.fetchAuthToken()!!
+    val token = sessionManager.fetchAuthToken()
 
     Column(
         modifier = Modifier
@@ -89,19 +105,33 @@ fun Champion(champion: Champion, champion_id: Int){
             .fillMaxWidth()
             .background(MaterialTheme.colorScheme.primaryContainer)
             .clickable {
-                apiClient.getChampion(champion.id.toString(),"Bearer $token")
-                    .enqueue(object: Callback<Champion> {
-                        override fun onFailure(call: Call<Champion>, t: Throwable){
-                            Log.e("Error", t.message.toString())
-                        }
+                if (token != null) {
+                    apiClient
+                        .getChampion(champion.id.toString(), "Bearer $token")
+                        .enqueue(object : Callback<Champion> {
+                            override fun onFailure(call: Call<Champion>, t: Throwable) {
+                                Log.e("Error", t.message.toString())
+                            }
 
-                        override fun onResponse(call: Call<Champion>, response: Response<Champion>){
-                            val intent = Intent(context, ChampionDetailsActivity::class.java)
-                            intent.putExtra("champion_id", champion_id.toString())
-                            intent.putExtra("likes_it", response.body()!!.current_user_likes_it.toString())
-                            context.startActivity(intent)
-                        }
-                    })
+                            override fun onResponse(
+                                call: Call<Champion>,
+                                response: Response<Champion>
+                            ) {
+                                val intent = Intent(context, ChampionDetailsActivity::class.java)
+                                intent.putExtra("champion_id", champion_id.toString())
+                                intent.putExtra(
+                                    "likes_it",
+                                    response.body()!!.current_user_likes_it.toString()
+                                )
+                                context.startActivity(intent)
+                            }
+                        })
+                } else {
+                    val intent = Intent(context, ChampionDetailsActivity::class.java)
+                    intent.putExtra("champion_id", champion_id.toString())
+                    intent.putExtra("likes_it", "false")
+                    context.startActivity(intent)
+                }
             }
     ){
         if(imageState is AsyncImagePainter.State.Error){
