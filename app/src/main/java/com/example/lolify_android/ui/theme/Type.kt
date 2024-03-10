@@ -11,12 +11,28 @@ import com.example.lolify_android.R
 
 object AppFont{
         val Montserrat = FontFamily(
-                Font(R.font.montserrat_medium),
-                Font(R.font.montserrat_light),
-                Font(R.font.montserrat_extralight),
-                Font(R.font.montserrat_extralightitalic),
-                Font(R.font.montserrat_bold)
+                Font(
+                    R.font.montserrat_medium,
+                    weight = FontWeight.Medium
+                ),
+                Font(
+                    R.font.montserrat_light,
+                    weight = FontWeight.Light
+                ),
+                Font(
+                    R.font.montserrat_extralight,
+                    weight = FontWeight.ExtraLight
+                ),
+                Font(
+                    R.font.montserrat_extralightitalic,
+                    weight = FontWeight.ExtraLight,
+                    style = FontStyle.Italic
+                ),
+                Font(
+                    R.font.montserrat_bold,
+                    weight = FontWeight.Bold
                 )
+        )
 }
 
 // Set of Material typography styles to start with

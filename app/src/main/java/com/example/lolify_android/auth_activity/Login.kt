@@ -156,6 +156,8 @@ suspend fun Login(email: String, password: String, context: Context){
                 if(loginResponse?.access_token != null) {
                     sessionManager.saveAuthToken(loginResponse.access_token)
                     context.startActivity(Intent(context, MainActivity::class.java))
+
+                    TODO("save current user")
                 } else{
                     Log.d("Error","Login error")
                     showError.value = true

@@ -20,6 +20,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -27,7 +28,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
@@ -47,35 +50,40 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
+
 @Composable
 fun ChampionList(championList: List<Champion>, modifier: Modifier = Modifier) {
     val context = LocalContext.current
 
     Scaffold(
         bottomBar = { BottomNavigationBar(selectedScreen = "champions", context = context) }
-    ) {
-        if (championList.isEmpty()) {
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-            ) {
-                CircularProgressIndicator()
-            }
-        } else {
-            Column(
-                verticalArrangement = Arrangement.Top,
-                horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = modifier.padding(8.dp)
-            ) {
-                LazyColumn(
-                    modifier = Modifier.fillMaxSize(),
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    contentPadding = PaddingValues(16.dp)
+    ) { innerPadding ->
+        Surface(
+            color = MaterialTheme.colorScheme.primary
+        ) {
+            if (championList.isEmpty()) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
                 ) {
-                    items(championList.size) { id ->
-                        Champion(championList[id], id)
-                        Spacer(modifier = Modifier.height(16.dp))
+                    CircularProgressIndicator()
+                }
+            } else {
+                Column(
+                    verticalArrangement = Arrangement.Top,
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    modifier = modifier
+                        .padding(8.dp, 8.dp, 8.dp, innerPadding.calculateBottomPadding())
+                ) {
+                    LazyColumn(
+                        modifier = Modifier.fillMaxSize(),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        contentPadding = PaddingValues(16.dp)
+                    ) {
+                        items(championList.size) { id ->
+                            Champion(championList[id], id)
+                            Spacer(modifier = Modifier.height(16.dp))
+                        }
                     }
                 }
             }
@@ -103,7 +111,7 @@ fun Champion(champion: Champion, champion_id: Int){
         modifier = Modifier
             .clip(RoundedCornerShape(20.dp))
             .fillMaxWidth()
-            .background(MaterialTheme.colorScheme.primaryContainer)
+            .background(MaterialTheme.colorScheme.secondary)
             .clickable {
                 if (token != null) {
                     apiClient
@@ -132,13 +140,14 @@ fun Champion(champion: Champion, champion_id: Int){
                     intent.putExtra("likes_it", "false")
                     context.startActivity(intent)
                 }
-            }
+            },
+        horizontalAlignment = Alignment.CenterHorizontally
     ){
         if(imageState is AsyncImagePainter.State.Error){
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(200.dp)
+                    .height(180.dp)
             ) {
                 CircularProgressIndicator()
             }
@@ -147,7 +156,7 @@ fun Champion(champion: Champion, champion_id: Int){
             Image(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(200.dp),
+                    .height(180.dp),
                 painter = imageState.painter,
                 contentDescription = champion.name,
                 contentScale = ContentScale.Crop
@@ -155,27 +164,28 @@ fun Champion(champion: Champion, champion_id: Int){
         }
 
         Spacer(
-            modifier = Modifier.height(6.dp)
+            modifier = Modifier.height(2.dp)
         )
 
         Text(
             text = champion.name,
             modifier = Modifier
-                .padding(horizontal = 16.dp),
-            fontSize = 17.sp,
-            fontWeight = FontWeight.SemiBold
-        )
-
-        Spacer(
-            modifier = Modifier.height(6.dp)
+                .padding(top = 2.dp),
+            fontSize = 15.sp,
+            fontWeight = FontWeight.SemiBold,
+            color = MaterialTheme.colorScheme.tertiary,
+            textAlign = TextAlign.Center
         )
 
         Text(
-            text = champion.title,
+            text = "'"+champion.title+"'",
             modifier = Modifier
-                .padding(horizontal = 16.dp),
-            fontSize = 13.sp,
-            fontWeight = FontWeight.Medium
+                .padding(bottom = 6.dp),
+            fontSize = 11.sp,
+            fontWeight = FontWeight.ExtraLight,
+            fontStyle = FontStyle.Italic,
+            color = MaterialTheme.colorScheme.tertiary,
+            textAlign = TextAlign.Center
         )
     }
 }

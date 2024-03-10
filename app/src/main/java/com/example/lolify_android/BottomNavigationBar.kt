@@ -26,13 +26,18 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
+import com.example.lolify_android.auth_activity.AuthActivity
 import com.example.lolify_android.champion_activity.ChampionListActivity
+import com.example.lolify_android.data.SessionManager
 import com.example.lolify_android.profile_activity.ProfileActivity
 import com.example.lolify_android.ui.theme.LolifyandroidTheme
 
 
 @Composable
 fun BottomNavigationBar(selectedScreen: String, context: Context) {
+
+    val sessionManager = SessionManager(context)
+
     NavigationBar(
         modifier = Modifier
             .fillMaxWidth(),
@@ -109,7 +114,15 @@ fun BottomNavigationBar(selectedScreen: String, context: Context) {
             colors = NavigationBarItemDefaults.colors(
                 indicatorColor = MaterialTheme.colorScheme.onPrimaryContainer
             ),
-            onClick = { /*TODO*/ },
+            onClick = {
+                if(sessionManager.fetchAuthToken() == null) {
+                    val intent = Intent(context, AuthActivity::class.java)
+                    context.startActivity(intent)
+                } else {
+                    val intent = Intent(context, ProfileActivity::class.java)
+                    context.startActivity(intent)
+                }
+            },
             label = {
                 Text(
                     "Profile",

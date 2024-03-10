@@ -3,6 +3,7 @@ package com.example.lolify_android.data
 import com.example.lolify_android.data.model.Champion
 import retrofit2.http.GET
 import com.example.lolify_android.data.model.Champions
+import com.example.lolify_android.data.model.CurrentUserResponse
 import com.example.lolify_android.data.model.LoginRequest
 import com.example.lolify_android.data.model.LoginResponse
 import com.example.lolify_android.data.model.Profile
@@ -32,6 +33,11 @@ interface ApiInterface {
         @Path("user_name") username: String,
         @Header("Authorization") token: String
     ): Profile
+
+    @GET("me")
+    suspend fun getCurrentUser(
+        @Header("Authorization") token: String
+    ): Call<CurrentUserResponse>
 
     @POST("login")
     fun login(@Body request: LoginRequest): Call<LoginResponse>

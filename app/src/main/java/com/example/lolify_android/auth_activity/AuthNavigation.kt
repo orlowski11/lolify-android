@@ -10,21 +10,13 @@ import com.example.lolify_android.data.SessionManager
 @Composable
 fun AuthNavigation(){
     val navController = rememberNavController()
-    var sessionManager: SessionManager
-    var context = LocalContext.current
 
-    sessionManager = SessionManager(context)
-
-    if(sessionManager.fetchAuthToken() == null) {
-        NavHost(navController = navController, startDestination = "login") {
-            composable("login") {
-                LoginForm(navController = navController)
-            }
-            composable("register") {
-                RegisterForm(navController = navController)
-            }
+    NavHost(navController = navController, startDestination = "login") {
+        composable("login") {
+            LoginForm(navController = navController)
         }
-    } else{
-        LogoutForm()
+        composable("register") {
+            RegisterForm(navController = navController)
+        }
     }
 }
