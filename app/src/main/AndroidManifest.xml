@@ -26,6 +26,7 @@
         <activity android:name=".champion_activity.ChampionListActivity"></activity>
         <activity android:name=".champion_activity.ChampionDetailsActivity"></activity>
         <activity android:name=".profile_activity.ProfileActivity"></activity>
+        <activity android:name=".profile_activity.SearchProfileActivity"></activity>
         <activity android:name=".auth_activity.AuthActivity"></activity>
     </application>
 

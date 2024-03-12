@@ -57,61 +57,12 @@ fun Homepage(modifier: Modifier = Modifier) {
         Surface(
             color = MaterialTheme.colorScheme.primary
         ) {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.End
-            ) {
-
-                IconButton(
-                    onClick = {
-                        context.startActivity(Intent(context, AuthActivity::class.java))
-                    },
-                    modifier = modifier
-                        .padding(10.dp)
-                        .border(
-                            1.dp,
-                            MaterialTheme.colorScheme.tertiary,
-                            shape = CircleShape
-                        )
-
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.Person,
-                        contentDescription = null,
-                        tint = MaterialTheme.colorScheme.tertiary
-                    )
-                }
-
-                IconButton(
-                    onClick = {
-                        val intent = Intent(context, ProfileActivity::class.java)
-                        intent.putExtra("user_name", "lajk")
-                        context.startActivity(intent)
-                    },
-                    modifier = modifier
-                        .padding(10.dp)
-                        .border(
-                            1.dp,
-                            MaterialTheme.colorScheme.tertiary,
-                            shape = CircleShape
-                        )
-
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.Person,
-                        contentDescription = null,
-                        tint = MaterialTheme.colorScheme.tertiary
-                    )
-                }
-            }
-
             Column(
                 verticalArrangement = Arrangement.Top,
                 horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = modifier
-                    .padding(8.dp, 8.dp, 8.dp, innerPadding.calculateBottomPadding())
+                    .padding(8.dp, 8.dp, 8.dp, innerPadding.calculateBottomPadding()+6.dp)
             ) {
-                val context = LocalContext.current
                 val imageLoader = ImageLoader.Builder(context)
                     .components {
                         if (Build.VERSION.SDK_INT >= 28) {
@@ -134,7 +85,7 @@ fun Homepage(modifier: Modifier = Modifier) {
 
                 Text(
                     text = "Champions in League",
-                    fontSize = 24.sp,
+                    fontSize = 27.sp,
                     lineHeight = 40.sp,
                     textAlign = TextAlign.Center,
                     fontFamily = AppFont.Montserrat,
@@ -154,19 +105,6 @@ fun Homepage(modifier: Modifier = Modifier) {
                     color = MaterialTheme.colorScheme.tertiary,
                     modifier = modifier.padding(12.dp)
                 )
-
-                Button(
-                    onClick = {
-                        context.startActivity(Intent(context, ChampionListActivity::class.java))
-                    },
-                    colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.tertiary)
-                ) {
-                    Text(
-                        "Go to champions",
-                        fontFamily = AppFont.Montserrat,
-                        color = MaterialTheme.colorScheme.primary
-                    )
-                }
             }
         }
     }

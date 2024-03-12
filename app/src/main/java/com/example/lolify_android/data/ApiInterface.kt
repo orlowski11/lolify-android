@@ -8,10 +8,8 @@ import com.example.lolify_android.data.model.LoginRequest
 import com.example.lolify_android.data.model.LoginResponse
 import com.example.lolify_android.data.model.Profile
 import com.example.lolify_android.data.model.RegisterRequest
-import com.example.lolify_android.data.model.User
 import okhttp3.ResponseBody
 import retrofit2.Call
-import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.Header
 import retrofit2.http.POST
@@ -35,7 +33,7 @@ interface ApiInterface {
     ): Profile
 
     @GET("me")
-    suspend fun getCurrentUser(
+    fun getCurrentUser(
         @Header("Authorization") token: String
     ): Call<CurrentUserResponse>
 

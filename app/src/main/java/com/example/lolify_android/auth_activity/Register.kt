@@ -4,10 +4,9 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.util.Log
-import androidx.compose.foundation.clickable
+import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -38,7 +37,6 @@ import com.example.lolify_android.MainActivity
 import com.example.lolify_android.RetrofitInstance
 import com.example.lolify_android.data.ApiInterface
 import com.example.lolify_android.data.SessionManager
-import com.example.lolify_android.data.model.LoginRequest
 import com.example.lolify_android.data.model.LoginResponse
 import com.example.lolify_android.data.model.RegisterRequest
 import com.example.lolify_android.ui.theme.AppFont
@@ -113,15 +111,16 @@ fun RegisterForm(navController: NavController) {
                             && showPasswordError.value == false
                             && showPasswordConfirmError.value == false
                         ) {
-                            coroutineScope.launch {
-                                Register(
-                                    credentials.email,
-                                    credentials.name,
-                                    credentials.password,
-                                    credentials.password_confirmation,
-                                    context
-                                )
-                            }
+
+                        }
+                        coroutineScope.launch {
+                            Register(
+                                credentials.email,
+                                credentials.name,
+                                credentials.password,
+                                credentials.password_confirmation,
+                                context
+                            )
                         }
                     },
                     enabled = true,
@@ -226,15 +225,16 @@ suspend fun Register(
     )).enqueue(object: Callback<LoginResponse> {
             override fun onFailure(call: Call<LoginResponse>, T: Throwable){
                 Log.d("Error","Register error")
+                Toast.makeText(context, T.message, Toast.LENGTH_SHORT).show()
             }
             override fun onResponse(call: Call<LoginResponse>, response: Response<LoginResponse>){
                 val loginResponse = response.body()
 
                 if(loginResponse?.access_token != null) {
-                    sessionManager.saveAuthToken(loginResponse.access_token)
+                    sessionManager.saveAuthToken(loginResponse.access_token!!)
                     context.startActivity(Intent(context, MainActivity::class.java))
                 } else{
-                    Log.d("Error","Register error")
+                    Toast.makeText(context, "Email or Username are already taken", Toast.LENGTH_SHORT).show()
                 }
             }
         })

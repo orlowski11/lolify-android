@@ -37,14 +37,10 @@ fun LogoutForm(){
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier
-                .fillMaxSize()
-                .padding(horizontal = 30.dp)
+                .fillMaxWidth()
+                .height(80.dp)
+                .padding(horizontal = 17.dp)
         ) {
-            Text(
-                text = "User name",
-                color = MaterialTheme.colorScheme.tertiary
-            )
-            Spacer(modifier = Modifier.height(10.dp))
             Button(
                 onClick = {
                     coroutineScope.launch{

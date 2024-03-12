@@ -64,9 +64,13 @@ fun ChampionList(championList: List<Champion>, modifier: Modifier = Modifier) {
             if (championList.isEmpty()) {
                 Box(
                     modifier = Modifier
-                        .fillMaxSize()
+                        .fillMaxSize(),
+                    contentAlignment = Alignment.Center,
                 ) {
-                    CircularProgressIndicator()
+                    CircularProgressIndicator(
+                        color = MaterialTheme.colorScheme.tertiary,
+                        strokeWidth = 1.dp
+                    )
                 }
             } else {
                 Column(
@@ -149,7 +153,10 @@ fun Champion(champion: Champion, champion_id: Int){
                     .fillMaxWidth()
                     .height(180.dp)
             ) {
-                CircularProgressIndicator()
+                CircularProgressIndicator(
+                    color = MaterialTheme.colorScheme.tertiary,
+                    strokeWidth = 1.dp
+                )
             }
         }
         if(imageState is AsyncImagePainter.State.Success){

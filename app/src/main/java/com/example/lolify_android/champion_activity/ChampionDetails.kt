@@ -5,6 +5,7 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.util.Log
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -239,8 +240,7 @@ fun ChampionDetails(
                             },
                             enabled = true,
                             shape = RoundedCornerShape(5.dp),
-                            colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.tertiary),
-                            //modifier = Modifier.fillMaxWidth()
+                            colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.tertiary)
                         ) {
                             if (likesIt) {
                                 Text(
@@ -351,7 +351,10 @@ fun Skill(skill: Skill) {
                         .width(55.dp)
                         .height(55.dp)
                 ) {
-                    CircularProgressIndicator()
+                    CircularProgressIndicator(
+                        color = MaterialTheme.colorScheme.tertiary,
+                        strokeWidth = 1.dp
+                    )
                 }
             }
             if (imageState is AsyncImagePainter.State.Success) {
@@ -408,7 +411,10 @@ fun Skin(skin: Skin) {
             modifier = Modifier
                 .size(240.dp)
         ) {
-            CircularProgressIndicator()
+            CircularProgressIndicator(
+                color = MaterialTheme.colorScheme.tertiary,
+                strokeWidth = 1.dp
+            )
         }
     }
     if (imageState is AsyncImagePainter.State.Success) {
@@ -453,6 +459,6 @@ suspend fun like(
         context.startActivity(intent)
         activity.finish()
     } else {
-
+        Toast.makeText(context, "Please log in to like a champion", Toast.LENGTH_SHORT).show()
     }
 }
