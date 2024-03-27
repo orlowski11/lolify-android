@@ -46,6 +46,7 @@ import com.example.lolify_android.RetrofitInstance
 import com.example.lolify_android.data.ApiInterface
 import com.example.lolify_android.data.SessionManager
 import com.example.lolify_android.data.model.Champion
+import com.example.lolify_android.navigation.Navigation
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -117,33 +118,13 @@ fun Champion(champion: Champion, champion_id: Int){
             .fillMaxWidth()
             .background(MaterialTheme.colorScheme.secondary)
             .clickable {
-                if (token != null) {
-                    apiClient
-                        .getChampion(champion.id.toString(), "Bearer $token")
-                        .enqueue(object : Callback<Champion> {
-                            override fun onFailure(call: Call<Champion>, t: Throwable) {
-                                Log.e("Error", t.message.toString())
-                            }
-
-                            override fun onResponse(
-                                call: Call<Champion>,
-                                response: Response<Champion>
-                            ) {
-                                val intent = Intent(context, ChampionDetailsActivity::class.java)
-                                intent.putExtra("champion_id", champion_id.toString())
-                                intent.putExtra(
-                                    "likes_it",
-                                    response.body()!!.current_user_likes_it.toString()
-                                )
-                                context.startActivity(intent)
-                            }
-                        })
-                } else {
-                    val intent = Intent(context, ChampionDetailsActivity::class.java)
-                    intent.putExtra("champion_id", champion_id.toString())
-                    intent.putExtra("likes_it", "false")
-                    context.startActivity(intent)
-                }
+                Navigation.startChampionDetailsActivity(
+                    context,
+                    token,
+                    apiClient,
+                    champion,
+                    champion_id
+                )
             },
         horizontalAlignment = Alignment.CenterHorizontally
     ){

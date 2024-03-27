@@ -35,6 +35,7 @@ import com.example.lolify_android.data.SessionManager
 import com.example.lolify_android.data.model.CurrentUserResponse
 import com.example.lolify_android.data.model.LoginRequest
 import com.example.lolify_android.data.model.LoginResponse
+import com.example.lolify_android.navigation.Navigation
 import com.example.lolify_android.profile_activity.ProfileActivity
 import com.example.lolify_android.profile_activity.SearchProfileActivity
 import com.example.lolify_android.ui.theme.LolifyandroidTheme
@@ -59,8 +60,7 @@ fun BottomNavigationBar(selectedScreen: String, context: Context) {
                 indicatorColor = MaterialTheme.colorScheme.onPrimaryContainer
             ),
             onClick = {
-                val intent = Intent(context, MainActivity::class.java)
-                context.startActivity(intent)
+                Navigation.startMainActivity(context)
             },
             label = {
                 Text(
@@ -82,8 +82,7 @@ fun BottomNavigationBar(selectedScreen: String, context: Context) {
                 indicatorColor = MaterialTheme.colorScheme.onPrimaryContainer
             ),
             onClick = {
-                val intent = Intent(context, ChampionListActivity::class.java)
-                context.startActivity(intent)
+                Navigation.startChampionActivity(context)
             },
             label = {
                 Text(
@@ -105,8 +104,7 @@ fun BottomNavigationBar(selectedScreen: String, context: Context) {
                 indicatorColor = MaterialTheme.colorScheme.onPrimaryContainer
             ),
             onClick = {
-                val intent = Intent(context, SearchProfileActivity::class.java)
-                context.startActivity(intent)
+                Navigation.startSearchProfileActivity(context)
             },
             label = {
                 Text(
@@ -128,28 +126,7 @@ fun BottomNavigationBar(selectedScreen: String, context: Context) {
                 indicatorColor = MaterialTheme.colorScheme.onPrimaryContainer
             ),
             onClick = {
-                if(sessionManager.fetchAuthToken() == null) {
-                    val intent = Intent(context, AuthActivity::class.java)
-                    context.startActivity(intent)
-                } else {
-                    val apiClient = RetrofitInstance.api
-                    val token = sessionManager.fetchAuthToken()
-
-                    apiClient.getCurrentUser("Bearer $token")
-                        .enqueue(object: Callback<CurrentUserResponse> {
-                            override fun onFailure(call: Call<CurrentUserResponse>, T: Throwable){
-                                Log.d("Error", T.message.toString())
-                                Toast.makeText(context, T.message, Toast.LENGTH_SHORT).show()
-                            }
-                            override fun onResponse(call: Call<CurrentUserResponse>, response: Response<CurrentUserResponse>){
-                                val currentUserResponse = response.body()
-                                val username = currentUserResponse?.name
-                                val intent = Intent(context, ProfileActivity::class.java)
-                                intent.putExtra("user_name", username)
-                                context.startActivity(intent)
-                            }
-                        })
-                }
+                Navigation.startProfileActivity(context, sessionManager)
             },
             label = {
                 Text(

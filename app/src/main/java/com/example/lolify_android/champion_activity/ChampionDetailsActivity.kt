@@ -35,7 +35,7 @@ class ChampionDetailsActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             LolifyandroidTheme {
-                // A surface container using the 'background' color from the theme
+
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
