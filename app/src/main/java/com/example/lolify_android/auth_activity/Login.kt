@@ -85,7 +85,7 @@ fun LoginForm(navController: NavController) {
                 Button(
                     onClick = {
                         coroutineScope.launch {
-                            Login(credentials.email, credentials.password, context)
+                            AuthFunctions.Login(credentials.email, credentials.password, context)
                         }
                     },
                     enabled = true,
@@ -135,31 +135,4 @@ fun LoginForm(navController: NavController) {
             }
         }
     }
-}
-
-suspend fun Login(email: String, password: String, context: Context){
-    var sessionManager: SessionManager
-    var apiClient: ApiInterface
-
-    apiClient = RetrofitInstance.api
-    sessionManager = SessionManager(context)
-
-    apiClient.login(LoginRequest(email = email, password = password))
-        .enqueue(object: Callback<LoginResponse> {
-            override fun onFailure(call: Call<LoginResponse>, T: Throwable){
-                Log.d("Error", T.message.toString())
-                showError.value = true
-            }
-            override fun onResponse(call: Call<LoginResponse>, response: Response<LoginResponse>){
-                val loginResponse = response.body()
-
-                if(loginResponse?.access_token != null) {
-                    sessionManager.saveAuthToken(loginResponse.access_token)
-                    context.startActivity(Intent(context, MainActivity::class.java))
-                } else{
-                    Log.d("Error","Login error")
-                    showError.value = true
-                }
-            }
-        })
 }

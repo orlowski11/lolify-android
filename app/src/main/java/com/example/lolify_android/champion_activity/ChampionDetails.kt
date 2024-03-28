@@ -58,7 +58,6 @@ import coil.size.Size
 import com.example.lolify_android.BottomNavigationBar
 import com.example.lolify_android.MainActivity
 import com.example.lolify_android.RetrofitInstance
-import com.example.lolify_android.auth_activity.Login
 import com.example.lolify_android.auth_activity.showError
 import com.example.lolify_android.data.ApiInterface
 import com.example.lolify_android.data.SessionManager

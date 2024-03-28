@@ -114,7 +114,7 @@ fun RegisterForm(navController: NavController) {
 
                         }
                         coroutineScope.launch {
-                            Register(
+                            AuthFunctions.Register(
                                 credentials.email,
                                 credentials.name,
                                 credentials.password,
@@ -202,42 +202,6 @@ fun RegisterForm(navController: NavController) {
             }
         }
     }
-}
-
-suspend fun Register(
-    email: String,
-    name: String,
-    password: String,
-    password_confirmation: String,
-    context: Context
-){
-    var sessionManager: SessionManager
-    var apiClient: ApiInterface
-
-    apiClient = RetrofitInstance.api
-    sessionManager = SessionManager(context)
-
-    apiClient.register(RegisterRequest(
-        email = email,
-        name = name,
-        password = password,
-        password_confirmation = password_confirmation
-    )).enqueue(object: Callback<LoginResponse> {
-            override fun onFailure(call: Call<LoginResponse>, T: Throwable){
-                Log.d("Error","Register error")
-                Toast.makeText(context, T.message, Toast.LENGTH_SHORT).show()
-            }
-            override fun onResponse(call: Call<LoginResponse>, response: Response<LoginResponse>){
-                val loginResponse = response.body()
-
-                if(loginResponse?.access_token != null) {
-                    sessionManager.saveAuthToken(loginResponse.access_token!!)
-                    context.startActivity(Intent(context, MainActivity::class.java))
-                } else{
-                    Toast.makeText(context, "Email or Username are already taken", Toast.LENGTH_SHORT).show()
-                }
-            }
-        })
 }
 
 fun isValidEmail(email: String): Boolean {

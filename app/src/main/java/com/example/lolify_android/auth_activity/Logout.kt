@@ -44,7 +44,7 @@ fun LogoutForm(){
             Button(
                 onClick = {
                     coroutineScope.launch{
-                        Logout(context)
+                        AuthFunctions.Logout(context)
                     }
                     context.startActivity(Intent(context, MainActivity::class.java))
                 },
@@ -61,11 +61,4 @@ fun LogoutForm(){
             }
         }
     }
-}
-
-suspend fun Logout(context: Context){
-    var sessionManager: SessionManager
-
-    sessionManager = SessionManager(context)
-    sessionManager.removeAuthToken()
 }

@@ -46,8 +46,6 @@ import coil.request.ImageRequest
 import coil.size.Size
 import com.example.lolify_android.BottomNavigationBar
 import com.example.lolify_android.RetrofitInstance
-import com.example.lolify_android.auth_activity.Login
-import com.example.lolify_android.auth_activity.Logout
 import com.example.lolify_android.auth_activity.LogoutForm
 import com.example.lolify_android.champion_activity.ChampionDetailsActivity
 import com.example.lolify_android.champion_activity.Skin
