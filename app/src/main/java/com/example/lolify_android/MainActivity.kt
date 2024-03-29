@@ -28,9 +28,12 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.darkColorScheme
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.compose.rememberNavController
 import coil.ImageLoader
 import coil.compose.rememberAsyncImagePainter
@@ -38,10 +41,23 @@ import coil.decode.GifDecoder
 import coil.decode.ImageDecoderDecoder
 import coil.request.ImageRequest
 import coil.size.Size
+import com.example.lolify_android.data.ChampionsRepositoryImpl
+import com.example.lolify_android.data.Top3ChampionsRepositoryImpl
 import com.example.lolify_android.presentation.championListViewModel
+import com.example.lolify_android.presentation.top3ChampionsViewModel
 import com.example.lolify_android.ui.theme.LolifyandroidTheme
 
 class MainActivity : ComponentActivity() {
+
+    private val viewModel by viewModels<top3ChampionsViewModel>(factoryProducer = {
+        object : ViewModelProvider.Factory {
+            override fun <T : ViewModel> create(modelClass: Class<T>): T {
+                return top3ChampionsViewModel(Top3ChampionsRepositoryImpl(RetrofitInstance.api))
+                        as T
+            }
+        }
+    })
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -51,7 +67,10 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.primary
                 ) {
-                    Homepage()
+
+                    val top3champions = viewModel.champions.collectAsState().value
+
+                    Homepage(top3champions)
                 }
             }
         }

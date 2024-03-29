@@ -47,9 +47,9 @@ class ChampionDetailsActivity : ComponentActivity() {
                     val likesIt = intent.getStringExtra("likes_it")!!.toBoolean()
 
 
-                    LaunchedEffect(key1 = viewModel.showErrorToastChannel){
+                    LaunchedEffect(key1 = viewModel.showErrorToastChannel) {
                         viewModel.showErrorToastChannel.collectLatest { show ->
-                            if(show){
+                            if (show) {
                                 Toast.makeText(
                                     context, "Error", Toast.LENGTH_SHORT
                                 ).show()
@@ -57,7 +57,7 @@ class ChampionDetailsActivity : ComponentActivity() {
                         }
                     }
 
-                    ChampionDetails(championList, id, likesIt,this)
+                    ChampionDetails(championList, id, likesIt, this)
                 }
             }
         }

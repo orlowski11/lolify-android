@@ -18,27 +18,30 @@ import kotlinx.coroutines.launch
 
 class profileViewModel(
     private val profileRepository: ProfileRepository
-): ViewModel() {
+) : ViewModel() {
 
-    private val _profile = MutableStateFlow<Profile>(Profile(
-        "",
-        false,
-        "",
-        emptyList(),
-        emptyList()
-        ))
+    private val _profile = MutableStateFlow<Profile>(
+        Profile(
+            "",
+            false,
+            "",
+            emptyList(),
+            emptyList()
+        )
+    )
     val profile = _profile.asStateFlow()
 
     private val _showErrorToastChannel = Channel<Boolean>()
     val showErrorToastChannel = _showErrorToastChannel.receiveAsFlow()
 
     init {
-        viewModelScope.launch{
+        viewModelScope.launch {
             profileRepository.getUserProfile().collectLatest { result ->
-                when(result){
+                when (result) {
                     is Result.Error -> {
                         _showErrorToastChannel.send(true)
                     }
+
                     is Result.Success -> {
                         result.data?.let { profile ->
                             _profile.update { profile }

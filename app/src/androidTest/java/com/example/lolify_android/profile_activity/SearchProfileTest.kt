@@ -23,14 +23,14 @@ import org.mockito.Mockito
 import org.mockito.junit.MockitoJUnitRunner
 
 @RunWith(MockitoJUnitRunner::class)
-@FixMethodOrder( MethodSorters.NAME_ASCENDING )
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 class SearchProfileTest {
 
     @get:Rule
     val composeTestRule = createAndroidComposeRule<SearchProfileActivity>()
 
     @Test
-    fun testSearchButtonClick(){
+    fun testSearchButtonClick() {
         val context = composeTestRule.activity
         val search = Mockito.mock(Search::class.java)
 

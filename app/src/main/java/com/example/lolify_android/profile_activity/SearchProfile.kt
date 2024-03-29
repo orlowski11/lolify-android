@@ -105,7 +105,7 @@ fun SearchField(
     modifier: Modifier = Modifier,
     label: String = "Name",
     placeholder: String = "Enter user name"
-){
+) {
     val focusManager = LocalFocusManager.current
     val trailingIcon = @Composable {
         Icon(

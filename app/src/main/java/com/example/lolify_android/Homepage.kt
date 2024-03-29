@@ -16,15 +16,24 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
@@ -41,19 +50,22 @@ import coil.decode.ImageDecoderDecoder
 import coil.request.ImageRequest
 import coil.size.Size
 import com.example.lolify_android.auth_activity.AuthActivity
+import com.example.lolify_android.champion_activity.Champion
 import com.example.lolify_android.champion_activity.ChampionDetailsActivity
 import com.example.lolify_android.champion_activity.ChampionListActivity
+import com.example.lolify_android.champion_activity.Skill
+import com.example.lolify_android.data.model.Champion
 import com.example.lolify_android.profile_activity.ProfileActivity
 import com.example.lolify_android.ui.theme.AppFont
 
 
 @Composable
-fun Homepage(modifier: Modifier = Modifier) {
+fun Homepage(top3champions: List<Champion>, modifier: Modifier = Modifier) {
     val context = LocalContext.current
 
     Scaffold(
         bottomBar = { BottomNavigationBar(selectedScreen = "home", context = context) },
-    ) {innerPadding ->
+    ) { innerPadding ->
         Surface(
             color = MaterialTheme.colorScheme.primary
         ) {
@@ -61,7 +73,8 @@ fun Homepage(modifier: Modifier = Modifier) {
                 verticalArrangement = Arrangement.Top,
                 horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = modifier
-                    .padding(8.dp, 8.dp, 8.dp, innerPadding.calculateBottomPadding()+6.dp)
+                    .padding(8.dp, 8.dp, 8.dp, innerPadding.calculateBottomPadding() + 6.dp)
+                    .verticalScroll(rememberScrollState())
             ) {
                 val imageLoader = ImageLoader.Builder(context)
                     .components {
@@ -105,6 +118,53 @@ fun Homepage(modifier: Modifier = Modifier) {
                     color = MaterialTheme.colorScheme.tertiary,
                     modifier = modifier.padding(12.dp)
                 )
+
+                Divider(
+                    color = MaterialTheme.colorScheme.secondary,
+                    thickness = 1.dp,
+                    modifier = Modifier
+                        .padding(vertical = 12.dp)
+                )
+
+                if (top3champions.isEmpty()) {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxSize(),
+                        contentAlignment = Alignment.Center,
+                    ) {
+                        CircularProgressIndicator(
+                            color = MaterialTheme.colorScheme.tertiary,
+                            strokeWidth = 1.dp
+                        )
+                    }
+                } else {
+                    Column(
+                        verticalArrangement = Arrangement.Top,
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        modifier = modifier
+                            .padding(8.dp, 8.dp, 8.dp, 0.dp)
+                    ) {
+                        Text(
+                            text = "Top 3 Champions: ",
+                            fontSize = 17.sp,
+                            lineHeight = 20.sp,
+                            textAlign = TextAlign.Center,
+                            fontFamily = AppFont.Montserrat,
+                            fontWeight = FontWeight.Bold,
+                            color = MaterialTheme.colorScheme.tertiary,
+                            modifier = modifier.padding(12.dp)
+                        )
+
+                        Spacer(modifier = Modifier.height(16.dp))
+
+                        var id = 0
+                        for (champion in top3champions) {
+                            Champion(champion, id)
+                            Spacer(modifier = Modifier.height(16.dp))
+                            id++
+                        }
+                    }
+                }
             }
         }
     }

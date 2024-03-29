@@ -26,6 +26,9 @@ interface ApiInterface {
         @Header("Authorization") token: String
     ): Call<Champion>
 
+    @GET("top3/champion")
+    suspend fun getTop3Champions(): Champions
+
     @GET("profile/{user_name}")
     suspend fun getUserProfile(
         @Path("user_name") username: String,
@@ -55,7 +58,7 @@ interface ApiInterface {
         @Header("Authorization") token: String
     ): Call<ResponseBody>
 
-    companion object{
+    companion object {
         const val BASE_URL = "https://lolify.fly.dev/api/"
     }
 }

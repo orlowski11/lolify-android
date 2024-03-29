@@ -27,10 +27,10 @@ import com.example.lolify_android.ui.theme.AppFont
 import kotlinx.coroutines.launch
 
 @Composable
-fun LogoutForm(){
+fun LogoutForm() {
     Surface(
         color = MaterialTheme.colorScheme.primary
-    ){
+    ) {
         val context = LocalContext.current
         val coroutineScope = rememberCoroutineScope()
         Column(
@@ -43,7 +43,7 @@ fun LogoutForm(){
         ) {
             Button(
                 onClick = {
-                    coroutineScope.launch{
+                    coroutineScope.launch {
                         AuthFunctions.Logout(context)
                     }
                     context.startActivity(Intent(context, MainActivity::class.java))

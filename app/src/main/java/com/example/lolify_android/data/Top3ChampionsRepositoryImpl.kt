@@ -1,20 +1,18 @@
 package com.example.lolify_android.data
 
-import androidx.compose.ui.platform.LocalContext
-import com.example.lolify_android.RetrofitInstance
 import com.example.lolify_android.data.model.Champion
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
-import okio.IOException
 import retrofit2.HttpException
+import java.io.IOException
 
-class ChampionsRepositoryImpl(
+class Top3ChampionsRepositoryImpl(
     private val api: ApiInterface
-) : ChampionsRepository {
-    override suspend fun getChampionList(): Flow<Result<List<Champion>>> {
+) : Top3ChampionsRepository {
+    override suspend fun getTop3Champions(): Flow<Result<List<Champion>>> {
         return flow {
             val championsFromApi = try {
-                api.getChampionList()
+                api.getTop3Champions()
             } catch (e: IOException) {
                 e.printStackTrace()
                 emit(Result.Error(message = "Error loading champions"))

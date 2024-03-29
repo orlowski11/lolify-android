@@ -125,7 +125,7 @@ fun ChampionDetails(
                         .padding(8.dp, 8.dp, 8.dp, innerPadding.calculateBottomPadding()),
                     horizontalAlignment = Alignment.CenterHorizontally,
                 ) {
-                    if(imageState is AsyncImagePainter.State.Error){
+                    if (imageState is AsyncImagePainter.State.Error) {
                         Box(
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -134,7 +134,7 @@ fun ChampionDetails(
                             CircularProgressIndicator()
                         }
                     }
-                    if(imageState is AsyncImagePainter.State.Success){
+                    if (imageState is AsyncImagePainter.State.Success) {
                         Image(
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -155,9 +155,9 @@ fun ChampionDetails(
                     )
 
                     Text(
-                        text = "'"+champion.title+"'",
+                        text = "'" + champion.title + "'",
                         modifier = Modifier
-                            .padding(0.dp,0.dp,0.dp,8.dp),
+                            .padding(0.dp, 0.dp, 0.dp, 8.dp),
                         fontSize = 17.sp,
                         fontWeight = FontWeight.ExtraLight,
                         fontStyle = FontStyle.Italic,
@@ -185,7 +185,7 @@ fun ChampionDetails(
                                 Text(
                                     text = champion.roles[id].name,
                                     modifier = Modifier
-                                        .padding(0.dp,0.dp,6.dp,0.dp),
+                                        .padding(0.dp, 0.dp, 6.dp, 0.dp),
                                     fontSize = 15.sp,
                                     fontFamily = AppFont.Montserrat,
                                     fontWeight = FontWeight.Light,
@@ -200,7 +200,7 @@ fun ChampionDetails(
                         modifier = Modifier
                             .padding(bottom = 8.dp, start = 8.dp)
                             .fillMaxWidth()
-                    ){
+                    ) {
                         Text(
                             text = "Likes: ",
                             modifier = Modifier
@@ -297,7 +297,7 @@ fun ChampionDetails(
                         color = MaterialTheme.colorScheme.tertiary,
                     )
 
-                    for(skill in champion.skills){
+                    for (skill in champion.skills) {
                         Skill(skill)
                         Spacer(modifier = Modifier.height(4.dp))
                     }
@@ -315,7 +315,7 @@ fun ChampionDetails(
                         modifier = Modifier
                             .height(190.dp)
                             .padding(bottom = 10.dp)
-                    ){
+                    ) {
                         items(champion.skins.size) { id ->
                             Skin(champion.skins[id])
                         }
@@ -433,7 +433,7 @@ suspend fun like(
     championListId: String,
     likesIt: Boolean,
     activity: Activity
-){
+) {
     var sessionManager: SessionManager
     var apiClient: ApiInterface
 

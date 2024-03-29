@@ -33,6 +33,7 @@ fun LolifyTextFieldColors() = TextFieldDefaults.textFieldColors(
     focusedPlaceholderColor = MaterialTheme.colorScheme.tertiary,
     cursorColor = MaterialTheme.colorScheme.tertiary,
 )
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun EmailField(
@@ -41,7 +42,7 @@ fun EmailField(
     modifier: Modifier = Modifier,
     label: String = "Email",
     placeholder: String = "Enter your email"
-){
+) {
     val focusManager = LocalFocusManager.current
     val trailingIcon = @Composable {
         Icon(
@@ -75,7 +76,7 @@ fun NameField(
     modifier: Modifier = Modifier,
     label: String = "Name",
     placeholder: String = "Enter your name"
-){
+) {
     val focusManager = LocalFocusManager.current
     val trailingIcon = @Composable {
         Icon(

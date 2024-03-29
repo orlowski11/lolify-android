@@ -45,9 +45,9 @@ class ChampionListActivity : ComponentActivity() {
                     val championList = viewModel.champions.collectAsState().value
                     val context = LocalContext.current
 
-                    LaunchedEffect(key1 = viewModel.showErrorToastChannel){
+                    LaunchedEffect(key1 = viewModel.showErrorToastChannel) {
                         viewModel.showErrorToastChannel.collectLatest { show ->
-                            if(show){
+                            if (show) {
                                 Toast.makeText(
                                     context, "Error", Toast.LENGTH_SHORT
                                 ).show()

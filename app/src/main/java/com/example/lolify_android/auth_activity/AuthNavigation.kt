@@ -8,7 +8,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.lolify_android.data.SessionManager
 
 @Composable
-fun AuthNavigation(){
+fun AuthNavigation() {
     val navController = rememberNavController()
 
     NavHost(navController = navController, startDestination = "login") {

@@ -24,37 +24,37 @@ import androidx.core.view.WindowCompat
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
 private val DarkColorScheme = darkColorScheme(
-        primary = DarkPrim,
-        secondary = DarkSec,
-        tertiary = DarkTert,
-        onPrimaryContainer = DarkTextFieldBackground,
-        error = Error
+    primary = DarkPrim,
+    secondary = DarkSec,
+    tertiary = DarkTert,
+    onPrimaryContainer = DarkTextFieldBackground,
+    error = Error
 )
 
 private val LightColorScheme = lightColorScheme(
-        primary = LightPrim,
-        secondary = LightSec,
-        tertiary = LightTert,
-        onPrimaryContainer = LightTextFieldBackground,
-        error = Error
+    primary = LightPrim,
+    secondary = LightSec,
+    tertiary = LightTert,
+    onPrimaryContainer = LightTextFieldBackground,
+    error = Error
 
-        /* Other default colors to override
-    background = Color(0xFFFFFBFE),
-    surface = Color(0xFFFFFBFE),
-    onPrimary = Color.White,
-    onSecondary = Color.White,
-    onTertiary = Color.White,
-    onBackground = Color(0xFF1C1B1F),
-    onSurface = Color(0xFF1C1B1F),
-    */
+    /* Other default colors to override
+background = Color(0xFFFFFBFE),
+surface = Color(0xFFFFFBFE),
+onPrimary = Color.White,
+onSecondary = Color.White,
+onTertiary = Color.White,
+onBackground = Color(0xFF1C1B1F),
+onSurface = Color(0xFF1C1B1F),
+*/
 )
 
 @Composable
 fun LolifyandroidTheme(
-        darkTheme: Boolean = isSystemInDarkTheme(),
-        // Dynamic color is available on Android 12+
-        dynamicColor: Boolean = true,
-        content: @Composable () -> Unit
+    darkTheme: Boolean = isSystemInDarkTheme(),
+    // Dynamic color is available on Android 12+
+    dynamicColor: Boolean = true,
+    content: @Composable () -> Unit
 ) {
     val colorScheme = when {
         dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
@@ -68,18 +68,18 @@ fun LolifyandroidTheme(
     val view = LocalView.current
 
     val systemUiController = rememberSystemUiController()
-    if(darkTheme){
+    if (darkTheme) {
         systemUiController.setSystemBarsColor(color = colorScheme.primary, darkIcons = false)
         systemUiController.setNavigationBarColor(color = colorScheme.secondary, darkIcons = false)
-    }else{
+    } else {
         systemUiController.setSystemBarsColor(color = colorScheme.primary, darkIcons = true)
         systemUiController.setNavigationBarColor(color = colorScheme.secondary, darkIcons = true)
     }
 
     MaterialTheme(
-            colorScheme = colorScheme,
-            typography = Typography,
-    ){
+        colorScheme = colorScheme,
+        typography = Typography,
+    ) {
         CompositionLocalProvider(
             LocalRippleTheme provides CustomRipple,
             content = content
@@ -87,7 +87,7 @@ fun LolifyandroidTheme(
     }
 }
 
-private object CustomRipple : RippleTheme{
+private object CustomRipple : RippleTheme {
     @Composable
     override fun defaultColor() = MaterialTheme.colorScheme.primary
 

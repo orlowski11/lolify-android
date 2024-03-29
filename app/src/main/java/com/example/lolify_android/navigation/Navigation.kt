@@ -38,7 +38,7 @@ open class Navigation {
         }
 
         fun startProfileActivity(context: Context, sessionManager: SessionManager) {
-            if(sessionManager.fetchAuthToken() == null) {
+            if (sessionManager.fetchAuthToken() == null) {
                 val intent = Intent(context, AuthActivity::class.java)
                 context.startActivity(intent)
             } else {
@@ -46,12 +46,16 @@ open class Navigation {
                 val token = sessionManager.fetchAuthToken()
 
                 apiClient.getCurrentUser("Bearer $token")
-                    .enqueue(object: Callback<CurrentUserResponse> {
-                        override fun onFailure(call: Call<CurrentUserResponse>, T: Throwable){
+                    .enqueue(object : Callback<CurrentUserResponse> {
+                        override fun onFailure(call: Call<CurrentUserResponse>, T: Throwable) {
                             Log.d("Error", T.message.toString())
                             Toast.makeText(context, T.message, Toast.LENGTH_SHORT).show()
                         }
-                        override fun onResponse(call: Call<CurrentUserResponse>, response: Response<CurrentUserResponse>){
+
+                        override fun onResponse(
+                            call: Call<CurrentUserResponse>,
+                            response: Response<CurrentUserResponse>
+                        ) {
                             val currentUserResponse = response.body()
                             val username = currentUserResponse?.name
                             val intent = Intent(context, ProfileActivity::class.java)
@@ -68,7 +72,7 @@ open class Navigation {
             apiClient: ApiInterface,
             champion: Champion,
             champion_id: Int
-        ){
+        ) {
             if (token != null) {
                 apiClient
                     .getChampion(champion.id.toString(), "Bearer $token")
@@ -115,7 +119,7 @@ open class Navigation {
     }
 
     fun startProfileActivity(context: Context, sessionManager: SessionManager) {
-        if(sessionManager.fetchAuthToken() == null) {
+        if (sessionManager.fetchAuthToken() == null) {
             val intent = Intent(context, AuthActivity::class.java)
             context.startActivity(intent)
         } else {
@@ -123,12 +127,16 @@ open class Navigation {
             val token = sessionManager.fetchAuthToken()
 
             apiClient.getCurrentUser("Bearer $token")
-                .enqueue(object: Callback<CurrentUserResponse> {
-                    override fun onFailure(call: Call<CurrentUserResponse>, T: Throwable){
+                .enqueue(object : Callback<CurrentUserResponse> {
+                    override fun onFailure(call: Call<CurrentUserResponse>, T: Throwable) {
                         Log.d("Error", T.message.toString())
                         Toast.makeText(context, T.message, Toast.LENGTH_SHORT).show()
                     }
-                    override fun onResponse(call: Call<CurrentUserResponse>, response: Response<CurrentUserResponse>){
+
+                    override fun onResponse(
+                        call: Call<CurrentUserResponse>,
+                        response: Response<CurrentUserResponse>
+                    ) {
                         val currentUserResponse = response.body()
                         val username = currentUserResponse?.name
                         val intent = Intent(context, ProfileActivity::class.java)
@@ -145,7 +153,7 @@ open class Navigation {
         apiClient: ApiInterface,
         champion: Champion,
         champion_id: Int
-    ){
+    ) {
         if (token != null) {
             apiClient
                 .getChampion(champion.id.toString(), "Bearer $token")

@@ -1,4 +1,5 @@
 package com.example.lolify_android
+
 import android.content.Context
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
@@ -24,7 +25,7 @@ class NavigationBarTest {
     val composeTestRule = createAndroidComposeRule<MainActivity>()
 
     @Test
-    fun testHomeButtonClick(){
+    fun testHomeButtonClick() {
         val context = composeTestRule.activity
         val navigation = mock(Navigation::class.java)
 
@@ -33,7 +34,7 @@ class NavigationBarTest {
     }
 
     @Test
-    fun testChampionsButtonClick(){
+    fun testChampionsButtonClick() {
         val context = composeTestRule.activity
         val navigation = mock(Navigation::class.java)
 
@@ -42,7 +43,7 @@ class NavigationBarTest {
     }
 
     @Test
-    fun testUsersButtonClick(){
+    fun testUsersButtonClick() {
         val context = composeTestRule.activity
         val navigation = mock(Navigation::class.java)
 
@@ -51,7 +52,7 @@ class NavigationBarTest {
     }
 
     @Test
-    fun testProfileButtonClick(){
+    fun testProfileButtonClick() {
         val context = composeTestRule.activity
         val sessionManager = SessionManager(context)
         val navigation = mock(Navigation::class.java)

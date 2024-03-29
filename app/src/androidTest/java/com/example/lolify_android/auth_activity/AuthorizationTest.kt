@@ -15,14 +15,14 @@ import org.mockito.Mockito
 import org.mockito.junit.MockitoJUnitRunner
 
 @RunWith(MockitoJUnitRunner::class)
-@FixMethodOrder( MethodSorters.NAME_ASCENDING )
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 class AuthorizationTest {
 
     @get:Rule
     val composeTestRule = createAndroidComposeRule<AuthActivity>()
 
     @Test
-    fun stage1_testLoginButtonClick(){
+    fun stage1_testLoginButtonClick() {
         val context = composeTestRule.activity
         val auth = Mockito.mock(AuthFunctions::class.java)
 
@@ -31,27 +31,27 @@ class AuthorizationTest {
     }
 
     @Test
-    fun stage1_testRegisterButtonClick(){
+    fun stage1_testRegisterButtonClick() {
         val context = composeTestRule.activity
         val auth = Mockito.mock(AuthFunctions::class.java)
 
         composeTestRule.onNodeWithText("Register").performClick()
         composeTestRule.onNodeWithText("Register").performClick()
-        Mockito.verify(auth).Register("","","","",context)
+        Mockito.verify(auth).Register("", "", "", "", context)
     }
 
     @Test
-    fun stage2_testLogin(){
+    fun stage2_testLogin() {
         val context = composeTestRule.activity
         val auth = Mockito.mock(AuthFunctions::class.java)
         val sessionManager = SessionManager(context)
 
-        auth.Login("test@gmail.com","test123456", context)
+        auth.Login("test@gmail.com", "test123456", context)
         sessionManager.fetchAuthToken()?.let { assert(it.isNotEmpty()) }
     }
 
     @Test
-    fun stage3_testLogout(){
+    fun stage3_testLogout() {
         val context = composeTestRule.activity
         val auth = Mockito.mock(AuthFunctions::class.java)
         val sessionManager = SessionManager(context)

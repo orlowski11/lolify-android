@@ -43,7 +43,7 @@ class ChampionListTest {
     val composeTestRule = createAndroidComposeRule<ComponentActivity>()
 
     @Test
-    fun testChampionDetailsClick(){
+    fun testChampionDetailsClick() {
         val champion = Champion(
             1,
             "test",
@@ -59,8 +59,11 @@ class ChampionListTest {
             "test",
             emptyList()
         )
-        composeTestRule.setContent{
-            com.example.lolify_android.champion_activity.Champion(champion = champion, champion_id = 1)
+        composeTestRule.setContent {
+            com.example.lolify_android.champion_activity.Champion(
+                champion = champion,
+                champion_id = 1
+            )
         }
         val context = composeTestRule.activity
         val navigation = mock(Navigation::class.java)

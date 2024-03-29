@@ -8,8 +8,8 @@ import com.example.lolify_android.data.ApiInterface
 import com.example.lolify_android.data.SessionManager
 
 open class Search {
-    companion object{
-        suspend fun SearchUser(name: String, context: Context){
+    companion object {
+        suspend fun SearchUser(name: String, context: Context) {
             var sessionManager: SessionManager
             var apiClient: ApiInterface
 
@@ -18,13 +18,13 @@ open class Search {
 
             val token = sessionManager.fetchAuthToken()
 
-            if(token != null) {
+            if (token != null) {
                 val Profile = try {
                     apiClient.getUserProfile(name, "Bearer $token")
-                } catch (E: Exception){
+                } catch (E: Exception) {
                     null
                 }
-                if(Profile != null){
+                if (Profile != null) {
                     val username = Profile.name
                     val intent = Intent(context, ProfileActivity::class.java)
                     intent.putExtra("user_name", username)
@@ -33,12 +33,13 @@ open class Search {
                     Toast.makeText(context, "User not found", Toast.LENGTH_SHORT).show()
                 }
             } else {
-                Toast.makeText(context, "Please log in to search other users", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, "Please log in to search other users", Toast.LENGTH_SHORT)
+                    .show()
             }
         }
     }
 
-    suspend fun SearchUser(name: String, context: Context){
+    suspend fun SearchUser(name: String, context: Context) {
         var sessionManager: SessionManager
         var apiClient: ApiInterface
 
@@ -47,13 +48,13 @@ open class Search {
 
         val token = sessionManager.fetchAuthToken()
 
-        if(token != null) {
+        if (token != null) {
             val Profile = try {
                 apiClient.getUserProfile(name, "Bearer $token")
-            } catch (E: Exception){
+            } catch (E: Exception) {
                 null
             }
-            if(Profile != null){
+            if (Profile != null) {
                 val username = Profile.name
                 val intent = Intent(context, ProfileActivity::class.java)
                 intent.putExtra("user_name", username)
@@ -62,7 +63,8 @@ open class Search {
                 Toast.makeText(context, "User not found", Toast.LENGTH_SHORT).show()
             }
         } else {
-            Toast.makeText(context, "Please log in to search other users", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, "Please log in to search other users", Toast.LENGTH_SHORT)
+                .show()
         }
     }
 }

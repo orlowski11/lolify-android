@@ -97,7 +97,7 @@ fun ChampionList(championList: List<Champion>, modifier: Modifier = Modifier) {
 }
 
 @Composable
-fun Champion(champion: Champion, champion_id: Int){
+fun Champion(champion: Champion, champion_id: Int) {
     val context = LocalContext.current
     val imageState = rememberAsyncImagePainter(
         model = ImageRequest.Builder(LocalContext.current).data(champion.image_link)
@@ -127,8 +127,8 @@ fun Champion(champion: Champion, champion_id: Int){
                 )
             },
         horizontalAlignment = Alignment.CenterHorizontally
-    ){
-        if(imageState is AsyncImagePainter.State.Error){
+    ) {
+        if (imageState is AsyncImagePainter.State.Error) {
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -140,7 +140,7 @@ fun Champion(champion: Champion, champion_id: Int){
                 )
             }
         }
-        if(imageState is AsyncImagePainter.State.Success){
+        if (imageState is AsyncImagePainter.State.Success) {
             Image(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -166,7 +166,7 @@ fun Champion(champion: Champion, champion_id: Int){
         )
 
         Text(
-            text = "'"+champion.title+"'",
+            text = "'" + champion.title + "'",
             modifier = Modifier
                 .padding(bottom = 6.dp),
             fontSize = 11.sp,

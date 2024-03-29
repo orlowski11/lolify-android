@@ -77,7 +77,7 @@ fun UserProfile(profile: Profile) {
                 context = context
             )
         }
-    ) {innerPadding ->
+    ) { innerPadding ->
         Surface(
             color = MaterialTheme.colorScheme.primary
         ) {
@@ -115,7 +115,7 @@ fun UserProfile(profile: Profile) {
                 LazyRow(
                     modifier = Modifier
                         .height(130.dp)
-                ){
+                ) {
                     items(profile.likes.size) { id ->
                         Spacer(
                             modifier = Modifier
@@ -145,7 +145,7 @@ fun UserProfile(profile: Profile) {
                     modifier = Modifier
                         .height(200.dp)
                         .background(MaterialTheme.colorScheme.secondary)
-                ){
+                ) {
                     items(profile.logs.size) { id ->
                         Spacer(
                             modifier = Modifier
@@ -154,7 +154,7 @@ fun UserProfile(profile: Profile) {
                         Logs(profile.logs[id])
                     }
                 }
-                
+
                 Spacer(Modifier.weight(1f))
 
                 if (isCurrentUsersProfile.value) {
@@ -171,17 +171,21 @@ fun UserProfile(profile: Profile) {
     }
 }
 
-fun isCurrentUsersProfile(name: String, context: Context){
+fun isCurrentUsersProfile(name: String, context: Context) {
     val apiClient = RetrofitInstance.api
     val sessionManager = SessionManager(context)
     val token = sessionManager.fetchAuthToken()
 
     apiClient.getCurrentUser("Bearer $token")
-        .enqueue(object: Callback<CurrentUserResponse> {
-            override fun onFailure(call: Call<CurrentUserResponse>, T: Throwable){
+        .enqueue(object : Callback<CurrentUserResponse> {
+            override fun onFailure(call: Call<CurrentUserResponse>, T: Throwable) {
                 Log.d("Error", T.message.toString())
             }
-            override fun onResponse(call: Call<CurrentUserResponse>, response: Response<CurrentUserResponse>){
+
+            override fun onResponse(
+                call: Call<CurrentUserResponse>,
+                response: Response<CurrentUserResponse>
+            ) {
                 val currentUserResponse = response.body()
                 val username = currentUserResponse?.name
                 isCurrentUsersProfile.value = (username == name)
@@ -190,7 +194,7 @@ fun isCurrentUsersProfile(name: String, context: Context){
 }
 
 @Composable
-fun Liked(champion: Champion){
+fun Liked(champion: Champion) {
     val context = LocalContext.current
     val imageState = rememberAsyncImagePainter(
         model = ImageRequest.Builder(LocalContext.current).data(champion.image_link)
@@ -211,8 +215,8 @@ fun Liked(champion: Champion){
             .size(140.dp)
             .background(MaterialTheme.colorScheme.secondary),
         horizontalAlignment = Alignment.CenterHorizontally
-    ){
-        if(imageState is AsyncImagePainter.State.Error){
+    ) {
+        if (imageState is AsyncImagePainter.State.Error) {
             Box(
                 modifier = Modifier
                     .height(110.dp)
@@ -223,7 +227,7 @@ fun Liked(champion: Champion){
                 )
             }
         }
-        if(imageState is AsyncImagePainter.State.Success){
+        if (imageState is AsyncImagePainter.State.Success) {
             Image(
                 modifier = Modifier
                     .height(110.dp),
@@ -250,15 +254,15 @@ fun Liked(champion: Champion){
 }
 
 @Composable
-fun Logs(log: com.example.lolify_android.data.model.Log){
+fun Logs(log: com.example.lolify_android.data.model.Log) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-    ){
+    ) {
         Text(
-            text = "- "+log.text,
+            text = "- " + log.text,
             modifier = Modifier
-                .padding(top = 2.dp, start= 8.dp),
+                .padding(top = 2.dp, start = 8.dp),
             fontSize = 17.sp,
             fontWeight = FontWeight.Medium,
             color = MaterialTheme.colorScheme.tertiary

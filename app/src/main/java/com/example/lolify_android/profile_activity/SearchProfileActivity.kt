@@ -10,7 +10,7 @@ import androidx.compose.ui.Modifier
 import com.example.lolify_android.auth_activity.AuthNavigation
 import com.example.lolify_android.ui.theme.LolifyandroidTheme
 
-class SearchProfileActivity: ComponentActivity() {
+class SearchProfileActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

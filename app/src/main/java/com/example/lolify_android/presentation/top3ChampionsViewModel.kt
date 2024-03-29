@@ -2,8 +2,8 @@ package com.example.lolify_android.presentation
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.lolify_android.data.ChampionsRepository
 import com.example.lolify_android.data.Result
+import com.example.lolify_android.data.Top3ChampionsRepository
 import com.example.lolify_android.data.model.Champion
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -13,8 +13,8 @@ import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
-class championListViewModel(
-    private val championsRepository: ChampionsRepository
+class top3ChampionsViewModel(
+    private val top3ChampionsRepository: Top3ChampionsRepository
 ) : ViewModel() {
 
     private val _champions = MutableStateFlow<List<Champion>>(emptyList())
@@ -25,7 +25,7 @@ class championListViewModel(
 
     init {
         viewModelScope.launch {
-            championsRepository.getChampionList().collectLatest { result ->
+            top3ChampionsRepository.getTop3Champions().collectLatest { result ->
                 when (result) {
                     is Result.Error -> {
                         _showErrorToastChannel.send(true)
@@ -40,4 +40,5 @@ class championListViewModel(
             }
         }
     }
+
 }
