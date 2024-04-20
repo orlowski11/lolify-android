@@ -17,42 +17,13 @@ import retrofit2.Response
 
 open class AuthFunctions {
     companion object {
+        val authFun: AuthFunctions = AuthFunctions()
         fun Login(email: String, password: String, context: Context) {
-            var sessionManager: SessionManager
-            var apiClient: ApiInterface
-
-            apiClient = RetrofitInstance.api
-            sessionManager = SessionManager(context)
-
-            apiClient.login(LoginRequest(email = email, password = password))
-                .enqueue(object : Callback<LoginResponse> {
-                    override fun onFailure(call: Call<LoginResponse>, T: Throwable) {
-                        Log.d("Error", T.message.toString())
-                        showError.value = true
-                    }
-
-                    override fun onResponse(
-                        call: Call<LoginResponse>,
-                        response: Response<LoginResponse>
-                    ) {
-                        val loginResponse = response.body()
-
-                        if (loginResponse?.access_token != null) {
-                            sessionManager.saveAuthToken(loginResponse.access_token)
-                            context.startActivity(Intent(context, MainActivity::class.java))
-                        } else {
-                            Log.d("Error", "Login error")
-                            showError.value = true
-                        }
-                    }
-                })
+            authFun.Login(email, password, context)
         }
 
         fun Logout(context: Context) {
-            var sessionManager: SessionManager
-
-            sessionManager = SessionManager(context)
-            sessionManager.removeAuthToken()
+            authFun.Logout(context)
         }
 
         fun Register(
@@ -62,43 +33,13 @@ open class AuthFunctions {
             password_confirmation: String,
             context: Context
         ) {
-            var sessionManager: SessionManager
-            var apiClient: ApiInterface
-
-            apiClient = RetrofitInstance.api
-            sessionManager = SessionManager(context)
-
-            apiClient.register(
-                RegisterRequest(
-                    email = email,
-                    name = name,
-                    password = password,
-                    password_confirmation = password_confirmation
-                )
-            ).enqueue(object : Callback<LoginResponse> {
-                override fun onFailure(call: Call<LoginResponse>, T: Throwable) {
-                    Log.d("Error", "Register error")
-                    Toast.makeText(context, T.message, Toast.LENGTH_SHORT).show()
-                }
-
-                override fun onResponse(
-                    call: Call<LoginResponse>,
-                    response: Response<LoginResponse>
-                ) {
-                    val loginResponse = response.body()
-
-                    if (loginResponse?.access_token != null) {
-                        sessionManager.saveAuthToken(loginResponse.access_token!!)
-                        context.startActivity(Intent(context, MainActivity::class.java))
-                    } else {
-                        Toast.makeText(
-                            context,
-                            "Email or Username are already taken",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    }
-                }
-            })
+            authFun.Register(
+                email,
+                name,
+                password,
+                password_confirmation,
+                context
+            )
         }
     }
 
