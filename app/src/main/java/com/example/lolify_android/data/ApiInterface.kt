@@ -59,6 +59,6 @@ interface ApiInterface {
     ): Call<ResponseBody>
 
     companion object {
-        const val BASE_URL = "https://lolify.fly.dev/api/"
+        const val BASE_URL = "https://lolify.wheelwallet.cloud/api/"
     }
 }
