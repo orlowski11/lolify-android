@@ -419,10 +419,10 @@ fun Skin(skin: Skin) {
     if (imageState is AsyncImagePainter.State.Success) {
         Image(
             modifier = Modifier
-                .padding(start = 8.dp, end = 8.dp),
+                .padding(start = 8.dp, end = 8.dp)
+                .size(240.dp),
             painter = imageState.painter,
             contentDescription = skin.id.toString(),
-            contentScale = ContentScale.FillHeight
         )
     }
 }
